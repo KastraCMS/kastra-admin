@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    
+    <title>Kastra - Administration</title>
+  </head>
+  <body>
+      <div class="wrapper">
+          <!-- Sidebar Holder -->
+          <nav id="sidebar" class="bg-dark active">
+              <div class="sidebar-header">
+                  <h3>Kastra</h3>
+                  <strong>K</strong>
+              </div>
+
+              <ul class="list-unstyled components">
+                  <li class="active">
+                      <a href="/">
+                        <i class="icon ion-home"></i>
+                          Home
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/pages">
+                          <i class="icon ion-document"></i>
+                          Pages
+                      </a>
+                  </li>
+                  <li>
+                      <a href="#">
+                          <i class="icon ion-person-stalker"></i>
+                          Users
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/settings">
+                          <i class="icon ion-gear-a"></i>
+                          Settings
+                      </a>
+                  </li>
+              </ul>
+
+              <ul class="list-unstyled CTAs">
+                  <li>
+                        <a href="#" class="article">
+                            <i class="icon ion-arrow-return-left"></i>  
+                            <span class="sidebar-hidden">Back to home</span>
+                        </a>
+                    </li>
+              </ul>
+          </nav>
+
+          <!-- Page Content Holder -->
+          <div id="content">
+                <nav class="navbar navbar-dark bg-dark">
+                    <button type="button" id="sidebarCollapse" class="btn btn-outline-info navbar-btn">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </nav>
+                <div id="root"></div>
+          </div>       
+      </div>
+      
+      <script type="text/javascript">
+             $(document).ready(function () {
+                 $('#sidebarCollapse').on('click', function () {
+                     $('#sidebar').toggleClass('active');
+                 });
+
+                 $('nav a').on('click', function () {
+                    $('nav .active').removeClass('active');
+                    $(this).closest('li').addClass('active');
+                 });
+             });
+         </script>
+  </body>
+</html>
