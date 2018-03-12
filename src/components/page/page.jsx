@@ -13,13 +13,15 @@ export default class Page extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.closeErrorMessage = this.closeErrorMessage.bind(this);
         this.closeSuccessMessage = this.closeSuccessMessage.bind(this);
-        this.validateForm = this.validateForm.bind(this);
 
         this.state = { 
             pageId: props.match.params.pageId,
             title: '',
+            titleError: false,
             keyname: '',
+            keynameError: false,
             templateId: '',
+            templateError: false,
             metaKeywords: '',
             metaDescription: '',
             metaRobot: '',
@@ -59,24 +61,6 @@ export default class Page extends Component {
         });
     }
 
-    validateForm() {
-        let errors = [];
-
-        if (this.state.title.length === 0) {
-            errors.push("Title can't be empty");
-        }
-
-        if (this.state.keyname.length === 0) {
-            errors.push("Keyname can't be empty");
-        }
-
-        if (this.state.templateId.length === 0) {
-            errors.push("A template must be selected");
-        }
-
-        return errors;
-    }
-
     handleChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -89,15 +73,44 @@ export default class Page extends Component {
     }
 
     handleSubmit(event) {
+
+        const errorMessages = [];
+        let newState = {};
+
         event.preventDefault();
+        this.validateForm();
 
-        const errors = this.validateForm();
-
-        if(errors.length > 0) {
-            this.setState({ displaySuccess: false, displayErrors: true, errors: errors});
+        if (this.state.title.length === 0) {
+            errorMessages.push("Title can't be empty");
+            newState.titleError = true;
         } else {
-            this.setState({ displaySuccess: true, displayErrors: false });
+            newState.titleError = false;
         }
+
+        if (this.state.keyname.length === 0) {
+            errorMessages.push("Keyname can't be empty");
+            newState.keynameError = true;
+        } else {
+            newState.keynameError = false;
+        }
+
+        if (this.state.templateId.length === 0) {
+            errorMessages.push("A template must be selected");
+            newState.templateError = true;
+        } else {
+            newState.templateError = false;
+        }
+
+        if(errorMessages.length > 0) {
+            newState.errors = errorMessages;
+            newState.displayErrors = true;
+            newState.displaySuccess = false;
+        } else {
+            newState.displayErrors = false;
+            newState.displaySuccess = true;
+        }
+
+        this.setState(newState);
     }
 
     closeSuccessMessage() {
@@ -121,9 +134,9 @@ export default class Page extends Component {
                 <form onSubmit={this.handleSubmit}>
 
                     <h3 className="mt-5 mb-3">General</h3>
-                    <SingleInput type="text" onChange={this.handleChange} title="Page title * :" name="title" value={this.state.title} />
-                    <SingleInput type="text" onChange={this.handleChange} title="Page keyname * :" name="keyname" value={this.state.keyname} />
-                    <SelectInput label="Template * :" placeholder="Page template" name="templateId" onChange={this.handleChange} options={this.state.templateOptions} selectedOption={this.state.templateId} />
+                    <SingleInput type="text" onChange={this.handleChange} displayError={this.state.titleError} title="Page title * :" name="title" value={this.state.title} />
+                    <SingleInput type="text" onChange={this.handleChange} displayError={this.state.keynameError} title="Page keyname * :" name="keyname" value={this.state.keyname} />
+                    <SelectInput label="Template * :" placeholder="Page template" name="templateId" displayError={this.state.templateError} onChange={this.handleChange} options={this.state.templateOptions} selectedOption={this.state.templateId} />
                 
                     <h3 className="mt-5 mb-3">SEO</h3>
                     <SingleInput type="text" onChange={this.handleChange} title="Meta keywords :" name="metaKeywords" value={this.state.metaKeywords} />
