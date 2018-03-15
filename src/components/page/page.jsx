@@ -78,7 +78,6 @@ export default class Page extends Component {
         let newState = {};
 
         event.preventDefault();
-        this.validateForm();
 
         if (this.state.title.length === 0) {
             errorMessages.push("Title can't be empty");

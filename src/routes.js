@@ -10,10 +10,11 @@ export const Routes = () => (
   <main>
     <Switch>
       <Route exact path='/' component={Settings}/>
-      <Route path='/modules' component={ModuleList}/>
-      <Route path='/module/:moduleId?' component={Module}/>
-      <Route path='/pages' component={PageList}/>
-      <Route path='/page/:pageId?' component={Page}/>
+      <Route exact path='/modules' component={ModuleList}/>
+      <Route path='/modules/edit/:moduleId?' component={Module}/>
+      <Route exact path='/pages' component={PageList}/>
+      <Route path='/pages/edit/:pageId?' component={Page}/>
+      <Route path='/settings' component={Settings}/>
     </Switch>
   </main>
 )
