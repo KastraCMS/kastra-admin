@@ -70,7 +70,7 @@ i, span {
     display: none;
 }
 
-#sidebar.active .sidebar-header strong {
+#sidebar.active .sidebar-header img {
     display: block;
 }
 
@@ -104,13 +104,12 @@ i, span {
     transform: translateX(50%);
 }
 
-#sidebar .sidebar-header {
+#sidebar .sidebar-header h3 {
     padding: 20px;
 }
 
-#sidebar .sidebar-header strong {
+#sidebar .sidebar-header img {
     display: none;
-    font-size: 1.8em;
 }
 
 #sidebar ul.components {
@@ -198,7 +197,7 @@ ul.CTAs a {
         display: none;
     }
 
-    #sidebar .sidebar-header strong {
+    #sidebar .sidebar-header img {
         display: block;
     }
 
@@ -237,6 +236,7 @@ ul.CTAs a {
     font-weight: 300;
     font-family: 'Poppins', sans-serif;
 }
+
 
 .form-control {
     border-color: #1997c6;
