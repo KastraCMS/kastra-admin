@@ -62,9 +62,7 @@ export default class User extends Component {
     handleRoleChange(event) {
         const target = event.target;
         const value = target.checked;
-        const name = target.name;
         const nRoles = [];
-        
         const roles = this.state.roles;
         let cRole;
 
@@ -72,7 +70,7 @@ export default class User extends Component {
 
             cRole = roles[i];
 
-            if(roles[i].id === parseInt(target.value)) {
+            if(roles[i].id === parseInt(target.value, 10)) {
                 if(value) {
                     cRole.checked = true;
                 } else {

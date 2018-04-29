@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import { NavIndexLink, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
-export default class NavigationSide extends React.Component {
+export default class NavigationSide extends Component {
     render() {
         return (
             <ul className="list-unstyled components">
                 <ExactNavigationLink url="/" title="Home" className="ion-home" />
                 <NavigationLink url="/pages" title="Pages" className="ion-document" />
+                <NavigationLink url="/modules" title="Modules" className="ion-cube" />
                 <NavigationLink url="/users" title="Users" className="ion-person-stalker" />
                 <NavigationLink url="/settings" title="Settings" className="ion-gear-a" />
             </ul>

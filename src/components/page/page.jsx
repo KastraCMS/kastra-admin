@@ -121,7 +121,7 @@ export default class Page extends Component {
     }
 
     render() {
-        let pageTitle = (this.state.pageId > 0) ? `Page : ${this.state.title}` : 'Nouvelle page';
+        let pageTitle = (this.state.pageId > 0) ? `Page : ${this.state.title}` : 'New page';
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">

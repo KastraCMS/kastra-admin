@@ -12,7 +12,8 @@ export const Routes = () => (
   <main>
     <Switch>
       <Route exact path='/' component={Settings}/>
-      <Route exact path='/modules' component={ModuleList}/>
+      <Route path='/modules/edit' component={Module}/>
+      <Route exact path='/modules/:pageId?' component={ModuleList}/>
       <Route path='/modules/edit/:moduleId?' component={Module}/>
       <Route exact path='/pages' component={PageList}/>
       <Route path='/pages/edit/:pageId?' component={Page}/>

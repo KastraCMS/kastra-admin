@@ -1,15 +1,19 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom'
 
-export default class UserList extends React.Component {
+export default class UserList extends Component {
 
     constructor(props) {
         super(props);
-
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     componentDidMount() {
-        //this.fetchSettings();
+
+    }
+
+    handleDelete() {
+
     }
 
     render() {
@@ -24,7 +28,6 @@ export default class UserList extends React.Component {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Edit roles</th>
                             <th scope="col">Edit</th>
                             <th scope="col">Delete</th>
                         </tr>
@@ -32,24 +35,21 @@ export default class UserList extends React.Component {
                     <tbody>
                         <tr>
                             <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td><Link to={`/users/roles/1`}><span className="ion-compose"></span></Link></td>
+                            <td>User 1</td>
                             <td><Link to={`/users/edit/1`}><span className="ion-compose"></span></Link></td>
-                            <td><a href="javascript:void(0)" onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
+                            <td><a href onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
                         </tr>
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Mark 2</td>
-                            <td><Link to={`/users/roles/1`}><span className="ion-compose"></span></Link></td>
+                            <th scope="row">2</th>
+                            <td>User 2</td>
                             <td><Link to={`/users/edit/1`}><span className="ion-compose"></span></Link></td>
-                            <td><a href="javascript:void(0)" onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
+                            <td><a href onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
                         </tr>
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Mark 3</td>
-                            <td><Link to={`/users/roles/1`}><span className="ion-compose"></span></Link></td>
+                            <th scope="row">3</th>
+                            <td>User 3</td>
                             <td><Link to={`/users/edit/1`}><span className="ion-compose"></span></Link></td>
-                            <td><a href="javascript:void(0)" onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
+                            <td><a href onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
                         </tr>
                     </tbody>
                 </table>
