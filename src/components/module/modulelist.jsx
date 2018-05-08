@@ -43,7 +43,7 @@ export default class ModuleList extends Component {
                 <h4 className="text-center">All your website module</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">Module list</h2>
-                <Link to={'/modules/edit'} className="btn btn-outline-info mb-5">New module</Link>
+                <Link to={'/admin/modules/edit'} className="btn btn-outline-info mb-5">New module</Link>
                 <table className="table table-dark bg-dark">
                     <thead>
                         <tr>
@@ -61,7 +61,7 @@ export default class ModuleList extends Component {
                                     <th scope="row">{module.id}</th>
                                     <td>{module.name}</td>
                                     <td><a target="blank" href="/modulesettings"><span className="ion-gear-a"></span></a></td>
-                                    <td><Link to={`/modules/edit/${module.id}`}><span className="ion-compose"></span></Link></td>
+                                    <td><Link to={`/admin/modules/edit/${module.id}`}><span className="ion-compose"></span></Link></td>
                                     <td><a href onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
                                 </tr>
                             );

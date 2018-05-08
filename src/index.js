@@ -15,14 +15,14 @@ class App extends React.Component {
           <nav id="sidebar" className="bg-dark active">
               <div className="sidebar-header">
                   <h3>Kastra</h3>
-                  <img id="logo" alt="Kastra" src="./logo.svg" />
+                  <img id="logo" alt="Kastra" src="~/img/logo.svg" />
               </div>
               <div id="navigation-side">
                 <NavigationSide />
               </div>
               <ul className="list-unstyled CTAs">
                   <li>
-                        <a href className="article">
+                        <a href="/" className="article">
                             <i className="icon ion-arrow-return-left"></i>  
                             <span className="sidebar-hidden">Back to home</span>
                         </a>

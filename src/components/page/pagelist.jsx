@@ -22,7 +22,7 @@ export default class PageList extends Component {
                 <h4 className="text-center"> Manage all the web site pages</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">Page list</h2>
-                <Link to={'/pages/edit'} className="btn btn-outline-info mb-4">New page</Link>
+                <Link to={'/admin/pages/edit'} className="btn btn-outline-info mb-4">New page</Link>
                 <table className="table table-dark bg-dark">
                     <thead>
                         <tr>
@@ -37,22 +37,22 @@ export default class PageList extends Component {
                         <tr>
                             <th scope="row">1</th>
                             <td>Page 1</td>
-                            <td><Link to={`/modules/1`}><span className="ion-cube"></span></Link></td>
-                            <td><Link to={`/pages/edit/1`}><span className="ion-compose"></span></Link></td>
+                            <td><Link to={`/admin/modules/1`}><span className="ion-cube"></span></Link></td>
+                            <td><Link to={`/admin/pages/edit/1`}><span className="ion-compose"></span></Link></td>
                             <td><a href onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>
                             <td>Page 2</td>
-                            <td><Link to={`/modules/2`}><span className="ion-cube"></span></Link></td>
-                            <td><Link to={`/pages/edit/2`}><span className="ion-compose"></span></Link></td>
+                            <td><Link to={`/admin/modules/2`}><span className="ion-cube"></span></Link></td>
+                            <td><Link to={`/admin/pages/edit/2`}><span className="ion-compose"></span></Link></td>
                             <td><a href onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
                         </tr>
                         <tr>
                             <th scope="row">3</th>
                             <td>Page 3</td>
-                            <td><Link to={`/modules/3`}><span className="ion-cube"></span></Link></td>
-                            <td><Link to={`/pages/edit/3`}><span className="ion-compose"></span></Link></td>
+                            <td><Link to={`/admin/modules/3`}><span className="ion-cube"></span></Link></td>
+                            <td><Link to={`/admin/pages/edit/3`}><span className="ion-compose"></span></Link></td>
                             <td><a href onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
                         </tr>
                     </tbody>

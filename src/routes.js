@@ -11,15 +11,15 @@ import User from './components/user/user'
 export const Routes = () => (
   <main>
     <Switch>
-      <Route exact path='/' component={Settings}/>
-      <Route path='/modules/edit' component={Module}/>
-      <Route exact path='/modules/:pageId?' component={ModuleList}/>
-      <Route path='/modules/edit/:moduleId?' component={Module}/>
-      <Route exact path='/pages' component={PageList}/>
-      <Route path='/pages/edit/:pageId?' component={Page}/>
-      <Route exact path='/users' component={UserList}/>
-      <Route path='/users/edit/:userId?' component={User}/>
-      <Route path='/settings' component={Settings}/>
+      <Route exact path='/admin/' component={Settings}/>
+      <Route path='/admin/modules/edit' component={Module}/>
+      <Route exact path='/admin/modules/:pageId?' component={ModuleList}/>
+      <Route path='/admin/modules/edit/:moduleId?' component={Module}/>
+      <Route exact path='/admin/pages' component={PageList}/>
+      <Route path='/admin/pages/edit/:pageId?' component={Page}/>
+      <Route exact path='/admin/users' component={UserList}/>
+      <Route path='/admin/users/edit/:userId?' component={User}/>
+      <Route path='/admin/settings' component={Settings}/>
     </Switch>
   </main>
 )
