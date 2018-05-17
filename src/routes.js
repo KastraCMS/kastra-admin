@@ -15,6 +15,7 @@ export const Routes = () => (
       <Route path='/admin/modules/edit' component={Module}/>
       <Route exact path='/admin/modules/:pageId?' component={ModuleList}/>
       <Route path='/admin/modules/edit/:moduleId?' component={Module}/>
+      <Route path='/admin/modules/new/:pageId?' component={Module}/>
       <Route exact path='/admin/pages' component={PageList}/>
       <Route path='/admin/pages/edit/:pageId?' component={Page}/>
       <Route exact path='/admin/users' component={UserList}/>

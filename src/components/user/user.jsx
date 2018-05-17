@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Message from '../common/message'
 import SingleInput from '../common/singleinput'
 import CheckboxInput from '../common/checkboxinput';
+import * as Kastra from '../../constants'
 
 export default class User extends Component {
 
@@ -18,6 +19,7 @@ export default class User extends Component {
             userId: props.match.params.userId,
             email: '',
             roles: [],
+            roleOptions: [],
             emailError: false,
             displaySuccess: false,
             displayErrors: false,
@@ -27,25 +29,71 @@ export default class User extends Component {
 
     componentDidMount() {
 
-        if(this.state.userId === undefined) {
-            return;
+        let data = {};
+
+        fetch(`${Kastra.API_URL}/api/role/list`, 
+                {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    data.roleOptions = [];
+                    
+                    result.forEach(function (element) {
+                        data.roleOptions.push({
+                            id: element.id,
+                            value: element.name,
+                            checked: false
+                        });
+                    });
+
+                    if(this.state.userId !== undefined) {
+                        this.fetchUser(data);
+                    } else {
+                        this.setState(data);
+                    }
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
+    }
+
+    fetchUser(data) {
+        fetch(`${Kastra.API_URL}/api/user/get/${this.state.userId}`, 
+                {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    data.email = result.email;
+                    data.roles = result.roles;
+
+                    if(data.roleOptions.length > 0) {
+                        data.roleOptions = this.setCheckBoxValues(data.roleOptions, data.roles);
+                    }
+
+                    this.setState(data);
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
+    }
+
+    setCheckBoxValues(options, values) {
+        
+        for(let i = 0; i < options.length; i++) {
+            if(values.includes(options[i].id)) {
+                options[i].checked = true;
+            } else {
+                options[i].checked = false;
+            }
         }
 
-        this.setState({ 
-            email: 'email@testemail.fr',
-            roles: [
-                {
-                    id: 1,
-                    value: "Administrator",
-                    checked: true
-                },
-                {
-                    id: 2,
-                    value: "Registred",
-                    checked: false
-                }
-            ]
-        });
+        return options;
     }
 
     handleChange(event) {
@@ -60,28 +108,23 @@ export default class User extends Component {
     }
 
     handleRoleChange(event) {
+        let roles = this.state.roles;
+        let options = this.state.roleOptions;
         const target = event.target;
-        const value = target.checked;
-        const nRoles = [];
-        const roles = this.state.roles;
-        let cRole;
+        const value = parseInt(target.value, 10);
+        const isChecked = target.checked;
+        const index = roles.indexOf(value);
 
-        for(let i = 0; i < roles.length; i++) {
-
-            cRole = roles[i];
-
-            if(roles[i].id === parseInt(target.value, 10)) {
-                if(value) {
-                    cRole.checked = true;
-                } else {
-                    cRole.checked = false;
-                }
-            }
-
-            nRoles.push(cRole);
-            
-            this.setState({ roles : nRoles });
+        if(isChecked) {
+            roles.splice(index, 0, value);
+        } else {
+            roles.splice(index, 1);
         }
+
+        this.setState({
+            roles: roles,
+            rolesOptions: this.setCheckBoxValues(options, roles)
+        });
     }
 
     handleSubmit(event) {
@@ -119,7 +162,7 @@ export default class User extends Component {
     }
 
     renderRoles() {
-        return this.state.roles.map((role, index) => {
+        return this.state.roleOptions.map((role, index) => {
             return (
                 <CheckboxInput key={index} name="roles" value={role.id} handleChange={this.handleRoleChange} checked={role.checked} title={role.value} />
             );
@@ -127,7 +170,7 @@ export default class User extends Component {
     }
 
     render() {
-        let userTitle = (this.state.userId > 0) ? 'Edit user' : 'New user';
+        let userTitle = (this.state.userId.length > 0) ? 'Edit user' : 'New user';
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">

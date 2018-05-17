@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Message from '../common/message'
 import SingleInput from '../common/singleinput'
+import CheckboxInput from '../common/checkboxinput';
+import * as Kastra from '../../constants'
 
 export default class Settings extends Component {
 
@@ -10,7 +12,7 @@ export default class Settings extends Component {
             title: '',
             description: '', 
             hostUrl: '', 
-            cache: true,
+            cacheActivated: false,
             displaySuccess: false
         };
 
@@ -30,21 +32,27 @@ export default class Settings extends Component {
     }
 
     componentDidMount() {
-        //this.fetchSettings();
-    }
+        let data = [];
 
-    fetchSettings() {
-        var that = this;
-        fetch("").then(function (response) {
-            return response.json();
-            }).then(function (result) {
-                that.setState({
-                    title: result.data.title,
-                    description: result.data.description, 
-                    hostUrl: result.data.hostUrl, 
-                    cache: result.data.cache });
-        });
-    }  
+        fetch(`${Kastra.API_URL}/api/siteconfiguration/get`, 
+                {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    data.title = result.title;
+                    data.description = result.description;
+                    data.hostUrl = result.hostUrl; 
+                    data.cacheActivated = result.cacheActivated;
+
+                    this.setState(data);
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
+    } 
 
     handleSubmit(event) {
         this.setState({ displaySuccess: true });
@@ -61,15 +69,13 @@ export default class Settings extends Component {
                 <h4 className="text-center">Configure your website</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">Site settings</h2>                
-                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message="Settings updatet with success" />
+                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message="Settings updated with success" />
                 <form onSubmit={this.handleSubmit}>
                     <SingleInput type="text" onChange={this.handleChange} title="Site title :" name="title" value={this.state.title} />
                     <SingleInput type="text" onChange={this.handleChange} title="Site description :" name="description" value={this.state.description} />
                     <SingleInput type="text" onChange={this.handleChange} title="Site url :" name="hostUrl" value={this.state.hostUrl} />
-                    <div className="form-check row ml-1">
-                        <input id="cache" className="form-check-input" name="cache" type="checkbox" checked={this.state.cache} onChange={this.handleChange} /> 
-                        <label htmlFor="cache" className="form-check-label">Cache enabled</label> 
-                    </div>
+                    <CheckboxInput name="cacheActivated" handleChange={this.handleChange} checked={this.state.cacheActivated} title="Cache enabled" />
+
                     <button type="submit" className="btn btn-outline-info mt-5 float-right">Submit</button>
                 </form>
             </div>

@@ -1,19 +1,64 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom'
+import * as Kastra from '../../constants'
 
 export default class PageList extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            pages: []
+        };
+
         this.handleDelete = this.handleDelete.bind(this);
     }
 
     componentDidMount() {
-
+        fetch(`${Kastra.API_URL}/api/page/list`, 
+            {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                this.setState({
+                    pages: result
+                });
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
     }
 
     handleDelete() {
         
+    }
+
+    renderPages() {
+        if(this.state.pages.length === 0) {
+            return (
+                <tr>
+                    <td align="center" colSpan="6">No page found</td>
+                </tr>
+            );
+        }
+
+        return (
+            this.state.pages.map((page, index) => {
+                return (
+                    <tr key={index}>
+                        <td>{page.id}</td>
+                        <td>{page.name}</td>
+                        <td>{page.keyName}</td>
+                        <td><Link to={`/admin/modules/${page.id}`}><span className="ion-cube"></span></Link></td>
+                        <td><Link to={`/admin/pages/edit/${page.id}`}><span className="ion-compose"></span></Link></td>
+                        <td><a href="" onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
+                    </tr>
+                );
+            })
+        );
     }
 
     render() {
@@ -28,33 +73,14 @@ export default class PageList extends Component {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
+                            <th scope="col">Keyname</th>
                             <th scope="col">Modules</th>
                             <th scope="col">Edit</th>
                             <th scope="col">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Page 1</td>
-                            <td><Link to={`/admin/modules/1`}><span className="ion-cube"></span></Link></td>
-                            <td><Link to={`/admin/pages/edit/1`}><span className="ion-compose"></span></Link></td>
-                            <td><a href onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Page 2</td>
-                            <td><Link to={`/admin/modules/2`}><span className="ion-cube"></span></Link></td>
-                            <td><Link to={`/admin/pages/edit/2`}><span className="ion-compose"></span></Link></td>
-                            <td><a href onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Page 3</td>
-                            <td><Link to={`/admin/modules/3`}><span className="ion-cube"></span></Link></td>
-                            <td><Link to={`/admin/pages/edit/3`}><span className="ion-compose"></span></Link></td>
-                            <td><a href onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
-                        </tr>
+                        {this.renderPages()}
                     </tbody>
                 </table>
             </div>

@@ -3,6 +3,7 @@ import Message from '../common/message'
 import SingleInput from '../common/singleinput'
 import SelectInput from '../common/selectinput'
 import CheckboxInput from '../common/checkboxinput';
+import * as Kastra from '../../constants'
 
 export default class Module extends Component {
 
@@ -15,7 +16,7 @@ export default class Module extends Component {
             nameError: false,
             definitionId: 0,
             definitionError: false,
-            pageId: 0,
+            pageId: props.match.params.pageId,
             pageError: false,
             placeId: 0,
             placeError: false,
@@ -33,96 +34,113 @@ export default class Module extends Component {
         this.handlePermissionChange = this.handlePermissionChange.bind(this);
         this.closeErrorMessage = this.closeErrorMessage.bind(this);
         this.closeSuccessMessage = this.closeSuccessMessage.bind(this);
-        this.fetchModule = this.fetchModule.bind(this);
     }
 
     componentDidMount() {
         let data = {};
 
-        // Default ajax calls
-        this.fetchDefinitions(data);
-        this.fetchPlaceholders(data);
-        this.fetchPermissions(data);
+        fetch(`${Kastra.API_URL}/api/moduledefinition/list`, 
+                {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    data.definitionOptionsOptions = [];
+                    
+                    result.forEach(function (element) {
+                        data.definitionOptionsOptions.push({
+                            name: element.name,
+                            value: element.id
+                        });
+                    });
 
-        if(this.state.moduleId === 0) {
-            return;
-        }
-
-        // Then set module values
-        this.fetchModule(data);
-
-        this.setState(data);
+                    this.fetchPlaceholders(data);
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
     }
 
     fetchModule(data) {
-        const permissionList = [1, 3];
-        let options = [];
+        fetch(`${Kastra.API_URL}/api/module/get/${this.state.moduleId}`, 
+                {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    data.name = result.name;
+                    data.definitionId = result.definitionId;
+                    data.pageId = result.pageId;
+                    data.placeId = result.placeId;
+                    data.permissions = result.permissions;
 
-        if(permissionList.length > 0) {
-            options = this.setCheckBoxValues(data.permissionOptions, permissionList);
-        }
+                    if(data.permissionOptions.length > 0) {
+                        data.permissionOptions = this.setCheckBoxValues(data.permissionOptions, data.permissions);
+                    }
 
-        data.name = 'module name';
-        data.definitionId = 1;
-        data.pageId = 3;
-        data.placeId = 2;
-        data.permissions = permissionList;
-        data.permissionOptions = options;
+                    this.setState(data);
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
     }
 
     fetchPlaceholders(data) {
-        data.placeOptions = [
-            {
-                name: 'Place 1',
-                value: 1
-            },
-            {
-                name: 'Place 2',
-                value: 2
-            },
-            {
-                name: 'Place 3',
-                value: 3
-            }
-        ];
-    }
+        fetch(`${Kastra.API_URL}/api/place/listbypageid/${this.state.pageId}`, 
+                {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    data.placeOptions = [];
+                    
+                    result.forEach(function (element) {
+                        data.placeOptions.push({
+                            name: element.keyname,
+                            value: element.id
+                        });
+                    });
 
-    fetchDefinitions(data) {
-        data.definitionOptions = [
-            {
-                name: 'Definition 1',
-                value: 1
-            },
-            {
-                name: 'Definition 2',
-                value: 2
-            },
-            {
-                name: 'Definition 3',
-                value: 3
-            }
-        ];
+                    this.fetchPermissions(data);
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
     }
 
     fetchPermissions(data) {
-        let permissionOptions = [
-            {
-                id: 1,
-                value: "Read",
-                checked: false
-            },
-            {
-                id: 2,
-                value: "Edit",
-                checked: false
-            }
-        ];
-
-        if(this.state.permissions.length !== 0) {
-            permissionOptions = this.setCheckBoxValues(permissionOptions, this.state.permissions);
-        }
-
-        data.permissionOptions = permissionOptions;
+        fetch(`${Kastra.API_URL}/api/permission/list`, 
+                {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    data.permissionOptions = [];
+                    
+                    result.forEach(function (element) {
+                        data.permissionOptions.push({
+                            id: element.id,
+                            value: element.name,
+                            checked: false
+                        });
+                    });
+                    if(this.state.moduleId !== undefined) {
+                        this.fetchModule(data);
+                    } else {
+                        this.setState(data);
+                    }
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
     }
 
     setCheckBoxValues(options, values) {

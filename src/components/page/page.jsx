@@ -3,6 +3,7 @@ import Message from '../common/message'
 import SingleInput from '../common/singleinput'
 import SelectInput from '../common/selectinput'
 import TextInput from '../common/textinput'
+import * as Kastra from '../../constants'
 
 export default class Page extends Component {
 
@@ -27,38 +28,63 @@ export default class Page extends Component {
             metaRobot: '',
             displaySuccess: false,
             displayErrors: false,
-            templateOptions: [
-                {
-                    name: 'default template',
-                    value: 1
-                },
-                {
-                    name: 'default template 2',
-                    value: 2
-                },
-                {
-                    name: 'default template 3',
-                    value: 3
-                }
-            ],
+            templateOptions: [],
             errors: []
         };
     }
 
     componentDidMount() {
-        
-        if(this.state.pageId === undefined) {
-            return;
-        }
+        let data = {};
 
-        this.setState({ 
-            title: 'Page title test',
-            keyname: 'titletest',
-            templateId: '2',
-            metaKeywords: 'key1, key2, key3',
-            metaDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            metaRobot: 'noindex'
-        });
+        fetch(`${Kastra.API_URL}/api/template/list`, 
+                {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    data.templateOptions = [];
+                    
+                    result.forEach(function (element) {
+                        data.templateOptions.push({
+                            name: element.name,
+                            value: element.id
+                        });
+                    });
+
+                    if(this.state.pageId !== undefined) {
+                        this.fetchPage(data);
+                    } else {
+                        this.setState(data);
+                    }
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
+    }
+
+    fetchPage(data) {
+        fetch(`${Kastra.API_URL}/api/page/get/${this.state.pageId}`, 
+                {
+                    method: 'GET',
+                    credentials: 'include'
+                })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                        data.title = result.name;
+                        data.keyname = result.keyName;
+                        data.templateId = result.templateId;
+                        data.metaKeywords = result.metaKeywords;
+                        data.metaDescription = result.metaDescription;
+                        data.metaRobot= result.metaRobot;
+
+                        this.setState(data);
+                    }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
     }
 
     handleChange(event) {
