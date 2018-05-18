@@ -2,19 +2,19 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import * as Kastra from '../../constants';
 
-export default class UserList extends Component {
+export default class RoleList extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = { 
-            users: []
+            roles: []
         };
         this.handleDelete = this.handleDelete.bind(this);
     }
 
     componentDidMount() {
-        fetch(`${Kastra.API_URL}/api/user/list`, 
+        fetch(`${Kastra.API_URL}/api/role/list`, 
         {
             method: 'GET',
             credentials: 'include'
@@ -23,7 +23,7 @@ export default class UserList extends Component {
         .then(
             (result) => {
             this.setState({
-                users: result
+                roles: result
             });
             }
         ).catch(function(error) {
@@ -35,23 +35,22 @@ export default class UserList extends Component {
 
     }
 
-    renderUsers() {
-        if(this.state.users.length === 0) {
+    renderRoles() {
+        if(this.state.roles.length === 0) {
             return (
                 <tr>
-                    <td align="center" colSpan="5">No user found</td>
+                    <td align="center" colSpan="5">No role found</td>
                 </tr>
             );
         }
 
         return (
-            this.state.users.map((user, index) => {
+            this.state.roles.map((role, index) => {
                 return (
                     <tr key={index}>
-                        <td>{user.id}</td>
-                        <td>{user.userName}</td>
-                        <td>{user.email}</td>
-                        <td><Link to={`/admin/users/edit/${user.id}`}><span className="ion-compose"></span></Link></td>
+                        <td>{role.id}</td>
+                        <td>{role.name}</td>
+                        <td><Link to={`/admin/users/role/${role.id}`}><span className="ion-compose"></span></Link></td>
                         <td><a href="" onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
                     </tr>
                 );
@@ -62,24 +61,21 @@ export default class UserList extends Component {
     render() {
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
-                <h4 className="text-center">All users of your website</h4>
+                <h4 className="text-center">All roles of your website</h4>
                 <hr/>
-                <h2 className="mb-5 text-center">User list</h2>
-                <Link to={'/admin/users/edit'} className="btn btn-outline-info mb-5">New user</Link>
-                <Link to={'/admin/users/roles'} className="btn btn-outline-info mb-5">Manage roles</Link>
-                <Link to={'/admin/users/permissions'} className="btn btn-outline-info mb-5">Manage permissions</Link>
+                <h2 className="mb-5 text-center">Role list</h2>
+                <Link to={'/admin/users/role'} className="btn btn-outline-info mb-5">New role</Link>
                 <table className="table table-dark bg-dark">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Email</th>
+                            <th scope="col">Name</th>
                             <th scope="col">Edit</th>
                             <th scope="col">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.renderUsers()}
+                        {this.renderRoles()}
                     </tbody>
                 </table>
             </div>

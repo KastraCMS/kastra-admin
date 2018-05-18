@@ -7,6 +7,8 @@ import PageList from './components/page/pagelist'
 import Page from './components/page/page'
 import UserList from './components/user/userlist'
 import User from './components/user/user'
+import RoleList from './components/user/rolelist'
+import Role from './components/user/role'
 
 export const Routes = () => (
   <main>
@@ -20,6 +22,8 @@ export const Routes = () => (
       <Route path='/admin/pages/edit/:pageId?' component={Page}/>
       <Route exact path='/admin/users' component={UserList}/>
       <Route path='/admin/users/edit/:userId?' component={User}/>
+      <Route exact path='/admin/users/roles' component={RoleList}/>
+      <Route exact path='/admin/users/role/:roleId?' component={Role}/>
       <Route path='/admin/settings' component={Settings}/>
     </Switch>
   </main>
