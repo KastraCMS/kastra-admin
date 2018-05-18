@@ -9,6 +9,7 @@ import UserList from './components/user/userlist'
 import User from './components/user/user'
 import RoleList from './components/user/rolelist'
 import Role from './components/user/role'
+import PermissionList from './components/user/permissionlist'
 
 export const Routes = () => (
   <main>
@@ -24,6 +25,7 @@ export const Routes = () => (
       <Route path='/admin/users/edit/:userId?' component={User}/>
       <Route exact path='/admin/users/roles' component={RoleList}/>
       <Route exact path='/admin/users/role/:roleId?' component={Role}/>
+      <Route exact path='/admin/users/permissions' component={PermissionList}/>
       <Route path='/admin/settings' component={Settings}/>
     </Switch>
   </main>
