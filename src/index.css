@@ -20,6 +20,10 @@ a, a:hover, a:focus {
     transition: all 0.3s;
 }
 
+.btn {
+    font-weight: 300;
+}
+
 .navbar {
     padding: 15px 10px;
     background: #fff;
