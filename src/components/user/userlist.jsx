@@ -66,9 +66,11 @@ export default class UserList extends Component {
                 <hr/>
                 <h2 className="mb-5 text-center">User list</h2>
                 <Link to={'/admin/users/edit'} className="btn btn-outline-info mb-5">New user</Link>
-                <Link to={'/admin/users/roles'} className="btn btn-outline-info mb-5">Manage roles</Link>
-                <Link to={'/admin/users/permissions'} className="btn btn-outline-info mb-5">Manage permissions</Link>
-                <table className="table table-dark bg-dark">
+                <div className="float-right">
+                    <Link to={'/admin/users/roles'} className="btn btn-outline-info mb-5">Manage roles</Link>
+                    <Link to={'/admin/users/permissions'} className="btn btn-outline-info mb-5 ml-3">Manage permissions</Link>
+                </div>
+                <table className="table table-hover table-dark bg-dark">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
