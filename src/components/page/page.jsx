@@ -102,6 +102,7 @@ export default class Page extends Component {
 
         const errorMessages = [];
         let newState = {};
+        let data = {};
 
         event.preventDefault();
 
@@ -130,12 +131,37 @@ export default class Page extends Component {
             newState.errors = errorMessages;
             newState.displayErrors = true;
             newState.displaySuccess = false;
+            this.setState(newState);
         } else {
             newState.displayErrors = false;
-            newState.displaySuccess = true;
-        }
+            
+            data.id = this.state.pageId;
+            data.name = this.state.title;
+            data.keyName = this.state.keyname;
+            data.templateId = this.state.templateId;
+            data.metaKeywords = this.state.metaKeywords;
+            data.metaDescription = this.state.metaDescription;
+            data.metaRobot= this.state.metaRobot;
 
-        this.setState(newState);
+            fetch(`${Kastra.API_URL}/api/page/update`, 
+            {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(
+                () => {
+                    newState.displaySuccess = true;
+                    this.fetchPage(newState);
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
+        }
     }
 
     closeSuccessMessage() {
@@ -159,14 +185,14 @@ export default class Page extends Component {
                 <form onSubmit={this.handleSubmit}>
 
                     <h3 className="mt-5 mb-3">General</h3>
-                    <SingleInput type="text" onChange={this.handleChange} displayError={this.state.titleError} title="Page title * :" name="title" value={this.state.title} />
-                    <SingleInput type="text" onChange={this.handleChange} displayError={this.state.keynameError} title="Page keyname * :" name="keyname" value={this.state.keyname} />
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.titleError} title="Page title * :" name="title" value={this.state.title} />
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.keynameError} title="Page keyname * :" name="keyname" value={this.state.keyname} />
                     <SelectInput label="Template * :" placeholder="Page template" name="templateId" displayError={this.state.templateError} onChange={this.handleChange} options={this.state.templateOptions} selectedOption={this.state.templateId} />
                 
                     <h3 className="mt-5 mb-3">SEO</h3>
-                    <SingleInput type="text" onChange={this.handleChange} title="Meta keywords :" name="metaKeywords" value={this.state.metaKeywords} />
-                    <TextInput onChange={this.handleChange} title="Meta description :" rows="3" name="metaDescription" value={this.state.metaDescription} />
-                    <SingleInput type="text" onChange={this.handleChange} title="Meta robot :" name="metaRobot" value={this.state.metaRobot} />
+                    <SingleInput type="text" handleChange={this.handleChange} title="Meta keywords :" name="metaKeywords" value={this.state.metaKeywords} />
+                    <TextInput handleChange={this.handleChange} title="Meta description :" rows="3" name="metaDescription" value={this.state.metaDescription} />
+                    <SingleInput type="text" handleChange={this.handleChange} title="Meta robot :" name="metaRobot" value={this.state.metaRobot} />
                 
                     <button type="submit" className="btn btn-outline-info mt-5 float-right">Submit</button>
                 </form>
