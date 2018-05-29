@@ -218,12 +218,37 @@ export default class Module extends Component {
             newState.errors = errorMessages;
             newState.displayErrors = true;
             newState.displaySuccess = false;
-        } else {
-            newState.displayErrors = false;
-            newState.displaySuccess = true;
-        }
 
-        this.setState(newState);
+            this.setState(newState);
+        } else {
+            let data = {};
+            data.id = this.state.moduleId;
+            data.name = this.state.name;
+            data.definitionId = this.state.definitionId;
+            data.pageId = this.state.pageId;
+            data.placeId = this.state.placeId;
+            data.permissions = this.state.permissions;
+
+            fetch(`${Kastra.API_URL}/api/module/update`, 
+            {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(
+                () => {
+                    newState.displayErrors = false;
+                    newState.displaySuccess = true;
+                    this.fetchModule(newState);
+                }
+            ).catch(function(error) {
+                console.log('Error: \n', error);
+            });
+        }
     }
 
     closeSuccessMessage() {
@@ -255,7 +280,7 @@ export default class Module extends Component {
                 <form onSubmit={this.handleSubmit}>
 
                     <h3 className="mt-5 mb-3">General</h3>
-                    <SingleInput type="text" onChange={this.handleChange} displayError={this.state.nameError} title="Name * :" name="name" value={this.state.name} />
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.nameError} title="Name * :" name="name" value={this.state.name} />
                     <SelectInput label="Module definition * :" placeholder="Select a definition" name="definitionId" displayError={this.state.definitionError} onChange={this.handleChange} options={this.state.definitionOptions} selectedOption={this.state.definitionId} />
                     <SelectInput label="Placeholder * :" placeholder="Select a placeholder" name="placeId" displayError={this.state.placeError} onChange={this.handleChange} options={this.state.placeOptions} selectedOption={this.state.placeId} />
 
