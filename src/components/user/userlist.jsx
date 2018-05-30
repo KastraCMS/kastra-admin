@@ -31,8 +31,24 @@ export default class UserList extends Component {
         });
     }
 
-    handleDelete() {
-
+    handleDelete(id) {
+        fetch(`${Kastra.API_URL}/api/user/delete`, 
+        {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(id)
+        })
+        .then(
+            () => {
+                this.componentDidMount();
+            }
+        ).catch(function(error) {
+            console.log('Error: \n', error);
+        });
     }
 
     renderUsers() {
@@ -46,13 +62,22 @@ export default class UserList extends Component {
 
         return (
             this.state.users.map((user, index) => {
+                const dialogId = `dialog-${index}`;
                 return (
                     <tr key={index}>
                         <td>{user.id}</td>
                         <td>{user.userName}</td>
                         <td>{user.email}</td>
                         <td><Link to={`/admin/users/edit/${user.id}`}><span className="ion-compose"></span></Link></td>
-                        <td><a href="" onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
+                        <td>
+                            <a href="" onClick={this.handleDelete} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
+                            <ConfirmDialog id={dialogId} 
+                                title="Delete user"
+                                message={`Are you sure you want to delete "${user.userName}" ?`}
+                                onConfirm={() => this.handleDelete(user.id)}
+                                confirmLabel="Delete"
+                                cancelLabel="Cancel" />
+                        </td>
                     </tr>
                 );
             })
