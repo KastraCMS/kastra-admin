@@ -31,8 +31,24 @@ export default class RoleList extends Component {
         });
     }
 
-    handleDelete() {
-
+    handleDelete(id) {
+        fetch(`${Kastra.API_URL}/api/role/delete`, 
+        {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(id)
+        })
+        .then(
+            () => {
+                this.componentDidMount();
+            }
+        ).catch(function(error) {
+            console.log('Error: \n', error);
+        });
     }
 
     renderRoles() {
@@ -46,12 +62,21 @@ export default class RoleList extends Component {
 
         return (
             this.state.roles.map((role, index) => {
+                const dialogId = `dialog-${index}`;
                 return (
                     <tr key={index}>
                         <td>{role.id}</td>
                         <td>{role.name}</td>
                         <td><Link to={`/admin/users/role/${role.id}`}><span className="ion-compose"></span></Link></td>
-                        <td><a href="" onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
+                        <td>
+                            <a href="" onClick={this.handleDelete} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
+                            <ConfirmDialog id={dialogId} 
+                                title="Delete role"
+                                message={`Are you sure you want to delete "${role.name}" ?`}
+                                onConfirm={() => this.handleDelete(role.id)}
+                                confirmLabel="Delete"
+                                cancelLabel="Cancel" />
+                        </td>
                     </tr>
                 );
             })
