@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
+import ConfirmDialog from '../common/confirmdialog';
 import * as Kastra from '../../constants'
 
 export default class ModuleList extends Component {
@@ -7,8 +8,6 @@ export default class ModuleList extends Component {
     constructor(props) {
         super(props);
 
-        this.handleDelete = this.handleDelete.bind(this);
-        
         this.state = { 
             pageId: props.match.params.pageId || 0,
             modules: []
@@ -33,8 +32,24 @@ export default class ModuleList extends Component {
             });
     }
 
-    handleDelete() {
-        
+    handleDelete(id) {
+        fetch(`${Kastra.API_URL}/api/module/delete`, 
+        {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(id)
+        })
+        .then(
+            () => {
+                this.componentDidMount();
+            }
+        ).catch(function(error) {
+            console.log('Error: \n', error);
+        });
     }
 
     renderModules() {
@@ -49,13 +64,22 @@ export default class ModuleList extends Component {
 
         return (
             this.state.modules.map((module, index) => {
+                const dialogId = `dialog-${index}`;
                 return (
                     <tr key={index}>
                         <td>{module.id}</td>
                         <td>{module.name}</td>
                         <td><a target="blank" href="/modulesettings"><span className="ion-gear-a"></span></a></td>
                         <td><Link to={`/admin/modules/edit/${module.id}`}><span className="ion-compose"></span></Link></td>
-                        <td><a href="" onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
+                        <td>
+                            <a href="" onClick={this.handleDelete} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
+                            <ConfirmDialog id={dialogId} 
+                                title="Delete module"
+                                message={`Are you sure you want to delete "${module.name}" ?`}
+                                onConfirm={() => this.handleDelete(module.id)}
+                                confirmLabel="Delete"
+                                cancelLabel="Cancel" />
+                        </td>
                     </tr>
                 );
             })
