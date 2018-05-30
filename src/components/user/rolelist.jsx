@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
+import ConfirmDialog from '../common/confirmdialog';
 import * as Kastra from '../../constants';
 
 export default class RoleList extends Component {
