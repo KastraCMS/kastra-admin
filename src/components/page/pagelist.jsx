@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom'
+import ConfirmDialog from '../common/confirmdialog';
 import * as Kastra from '../../constants'
 
 export default class PageList extends Component {
@@ -10,30 +11,44 @@ export default class PageList extends Component {
         this.state = {
             pages: []
         };
-
-        this.handleDelete = this.handleDelete.bind(this);
     }
 
     componentDidMount() {
         fetch(`${Kastra.API_URL}/api/page/list`, 
-            {
-                method: 'GET',
-                credentials: 'include'
-            })
-            .then(res => res.json())
-            .then(
-                (result) => {
-                this.setState({
-                    pages: result
-                });
-                }
-            ).catch(function(error) {
-                console.log('Error: \n', error);
+        {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+            this.setState({
+                pages: result
             });
+            }
+        ).catch(function(error) {
+            console.log('Error: \n', error);
+        });
     }
 
-    handleDelete() {
-        
+    handleDelete(id) {
+        fetch(`${Kastra.API_URL}/api/page/delete`, 
+        {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(id)
+        })
+        .then(
+            () => {
+                this.componentDidMount();
+            }
+        ).catch(function(error) {
+            console.log('Error: \n', error);
+        });
     }
 
     renderPages() {
@@ -47,6 +62,7 @@ export default class PageList extends Component {
 
         return (
             this.state.pages.map((page, index) => {
+                const dialogId = `dialog-${index}`;
                 return (
                     <tr key={index}>
                         <td>{page.id}</td>
@@ -54,7 +70,15 @@ export default class PageList extends Component {
                         <td>{page.keyName}</td>
                         <td><Link to={`/admin/modules/${page.id}`}><span className="ion-cube"></span></Link></td>
                         <td><Link to={`/admin/pages/edit/${page.id}`}><span className="ion-compose"></span></Link></td>
-                        <td><a href="" onClick={this.handleDelete}><span className="ion-trash-a"></span></a></td>
+                        <td>
+                            <a href="" onClick={(e) => e.preventDefault()} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
+                            <ConfirmDialog id={dialogId} 
+                                title="Delete page"
+                                message={`Are you sure you want to delete "${page.name}" ?`}
+                                onConfirm={() => this.handleDelete(page.id)}
+                                confirmLabel="Delete"
+                                cancelLabel="Cancel" />
+                        </td>
                     </tr>
                 );
             })
