@@ -2,7 +2,7 @@ import React from 'react';
 
 const ConfirmDialog = (props) => {
     return (
-        <div className="modal fade" id={props.id} tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div className="modal fade" id={props.id} tabIndex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" role="document">
                 <div className="modal-content text-white bg-dark">
                 <div className="modal-header">

@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import Settings from './components/siteconfiguration/settings'
 import Module from './components/module/module'
 import ModuleList from './components/module/modulelist'
+import ModuleInstall from './components/module/moduleinstall'
 import PageList from './components/page/pagelist'
 import Page from './components/page/page'
 import UserList from './components/user/userlist'
@@ -15,10 +16,11 @@ export const Routes = () => (
   <main>
     <Switch>
       <Route exact path='/admin/' component={Settings}/>
-      <Route path='/admin/modules/edit' component={Module}/>
-      <Route exact path='/admin/modules/:pageId?' component={ModuleList}/>
+      <Route exact path='/admin/modules/edit' component={Module}/>
       <Route path='/admin/modules/edit/:moduleId?' component={Module}/>
       <Route path='/admin/modules/new/:pageId?' component={Module}/>
+      <Route exact path='/admin/modules/install' component={ModuleInstall}/>
+      <Route path='/admin/modules/:pageId?' component={ModuleList}/>
       <Route exact path='/admin/pages' component={PageList}/>
       <Route path='/admin/pages/edit/:pageId?' component={Page}/>
       <Route exact path='/admin/users' component={UserList}/>

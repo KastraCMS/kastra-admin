@@ -69,13 +69,13 @@ export default class ModuleList extends Component {
                     <tr key={index}>
                         <td>{module.id}</td>
                         <td>{module.name}</td>
-                        <td><a target="blank" href="/modulesettings"><span className="ion-gear-a"></span></a></td>
+                        <td><a target="blank" href={`admin/module/settings/${module.id}/settings`}><span className="ion-gear-a"></span></a></td>
                         <td><Link to={`/admin/modules/edit/${module.id}`}><span className="ion-compose"></span></Link></td>
                         <td>
                             <a href="" onClick={this.handleDelete} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
                             <ConfirmDialog id={dialogId} 
                                 title="Delete module"
-                                message={`Are you sure you want to delete "${module.name}" ?`}
+                                message={`Are you sure you want to uninstall "${module.name}" ?`}
                                 onConfirm={() => this.handleDelete(module.id)}
                                 confirmLabel="Delete"
                                 cancelLabel="Cancel" />
@@ -93,6 +93,9 @@ export default class ModuleList extends Component {
                 <hr/>
                 <h2 className="mb-5 text-center">Module list</h2>
                 <Link to={`/admin/modules/new/${this.state.pageId}`} className="btn btn-outline-info mb-5">New module</Link>
+                <div className="float-right">
+                    <Link to={'/admin/modules/install'} className="btn btn-outline-info mb-5">Manage module definitions</Link>
+                </div>
                 <table className="table table-dark bg-dark">
                     <thead>
                         <tr>

@@ -47,10 +47,10 @@ export default class Module extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    data.definitionOptionsOptions = [];
+                    data.definitionOptions = [];
                     
                     result.forEach(function (element) {
-                        data.definitionOptionsOptions.push({
+                        data.definitionOptions.push({
                             name: element.name,
                             value: element.id
                         });
