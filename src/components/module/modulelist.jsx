@@ -69,7 +69,11 @@ export default class ModuleList extends Component {
                     <tr key={index}>
                         <td>{module.id}</td>
                         <td>{module.name}</td>
-                        <td><a target="blank" href={`admin/module/settings/${module.id}/settings`}><span className="ion-gear-a"></span></a></td>
+                        <td>
+                            <a target="blank" href={`module/settings/${module.id}/settings`} onclick="return !window.open(this.href, 'Module settings', 'width=500,height=500')">
+                                <span className="ion-gear-a"></span>
+                            </a>
+                        </td>
                         <td><Link to={`/admin/modules/edit/${module.id}`}><span className="ion-compose"></span></Link></td>
                         <td>
                             <a href="" onClick={this.handleDelete} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
