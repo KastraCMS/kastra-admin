@@ -10,8 +10,6 @@ export default class ModuleInstall extends Component {
         this.state = { 
             modules: []
          };
-
-        this.handleUninstall = this.handleUninstall.bind(this);
     }
 
     componentDidMount() {
@@ -36,26 +34,45 @@ export default class ModuleInstall extends Component {
         event.preventDefault();
 
         fetch(`${Kastra.API_URL}/api/moduledefinition/install`, 
-            {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(assemblyName)
-            })
-            .then(
-                () => {
-                    this.componentDidMount();
-                }
-            ).catch(function(error) {
-                console.log('Error: \n', error);
-            });
+        {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(assemblyName)
+        })
+        .then(
+            () => {
+                this.componentDidMount();
+            }
+        ).catch(function(error) {
+            console.log('Error: \n', error);
+        });
     }
 
-    handleUninstall() {
+    handleUninstall(event, assemblyName, moduleDefinitionId) {
+        event.preventDefault();
 
+        const data = { name: assemblyName, id: moduleDefinitionId };
+        fetch(`${Kastra.API_URL}/api/moduledefinition/uninstall`, 
+        {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(
+            () => {
+                this.componentDidMount();
+            }
+        ).catch(function(error) {
+            console.log('Error: \n', error);
+        });
     }
 
     renderModules() {
@@ -79,11 +96,11 @@ export default class ModuleInstall extends Component {
                             <td><span className='ion-checkmark-round'></span></td>
                             <td>{module.version}</td>
                             <td>
-                                <a href="" onClick={this.handleUninstall} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
+                                <a href="" data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
                                 <ConfirmDialog id={dialogId} 
                                     title="Uninstall module"
                                     message={`Are you sure you want to uninstall "${module.name}" ?`}
-                                    onConfirm={() => this.handleDelete(module.id)}
+                                    onConfirm={(e) => this.handleUninstall(e, module.assemblyName, module.moduleDefinitionId)}
                                     confirmLabel="Uninstall"
                                     cancelLabel="Cancel" />
                             </td>
