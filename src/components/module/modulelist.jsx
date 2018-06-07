@@ -52,6 +52,10 @@ export default class ModuleList extends Component {
         });
     }
 
+    openPopup(event) {
+        window.open(this.href, 'Module settings', 'width=500,height=500');
+    }
+
     renderModules() {
 
         if(this.state.modules.length === 0) {
@@ -70,7 +74,7 @@ export default class ModuleList extends Component {
                         <td>{module.id}</td>
                         <td>{module.name}</td>
                         <td>
-                            <a target="blank" href={`module/settings/${module.id}/settings`} onclick="return !window.open(this.href, 'Module settings', 'width=500,height=500')">
+                            <a target="blank" href={`module/settings/${module.id}/settings`} onClick={this.openPopup}>
                                 <span className="ion-gear-a"></span>
                             </a>
                         </td>
