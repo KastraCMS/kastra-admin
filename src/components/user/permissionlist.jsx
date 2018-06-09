@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ConfirmDialog from '../common/confirmdialog';
+import Loading from '../common/loading'
 import * as Kastra from '../../constants';
 
 export default class PermissionList extends Component {
@@ -9,7 +10,9 @@ export default class PermissionList extends Component {
 
         this.state = {
             name: '',
-            permissions: []
+            permissions: [],
+            isLoading: false,
+            loadingMessage: ''
         };
 
         this.handleCreate = this.handleCreate.bind(this);
@@ -17,6 +20,7 @@ export default class PermissionList extends Component {
     }
 
     componentDidMount() {
+        this.setState({ isLoading: true, loadingMessage: 'Loading permissions ...'});
         fetch(`${Kastra.API_URL}/api/permission/list`, 
         {
             method: 'GET',
@@ -26,10 +30,12 @@ export default class PermissionList extends Component {
         .then(
             (result) => {
             this.setState({
-                permissions: result
+                permissions: result,
+                isLoading: false
             });
             }
         ).catch(function(error) {
+            this.setState({ isLoading: false });
             console.log('Error: \n', error);
         });
     }
@@ -39,6 +45,8 @@ export default class PermissionList extends Component {
         event.preventDefault();
 
         const data = this.state.name;
+
+        this.setState({ isLoading: true, loadingMessage: 'Adding permission ...' });
 
         fetch(`${Kastra.API_URL}/api/permission/add`, 
             {
@@ -56,6 +64,7 @@ export default class PermissionList extends Component {
                     this.componentDidMount();
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
@@ -72,6 +81,8 @@ export default class PermissionList extends Component {
 
     handleDelete(id) {
 
+        this.setState({ isLoading: true, loadingMessage: 'Deleting permission ...' });
+        
         fetch(`${Kastra.API_URL}/api/permission/delete`, 
             {
                 method: 'DELETE',
@@ -87,6 +98,7 @@ export default class PermissionList extends Component {
                     this.componentDidMount();
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
@@ -126,6 +138,7 @@ export default class PermissionList extends Component {
     render() {
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
+                <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">All permissions of your website</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">Permission list</h2>

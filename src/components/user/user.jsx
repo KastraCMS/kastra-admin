@@ -3,6 +3,7 @@ import Message from '../common/message'
 import SingleInput from '../common/singleinput'
 import CheckboxInput from '../common/checkboxinput';
 import * as Kastra from '../../constants'
+import Loading from '../common/loading';
 
 export default class User extends Component {
 
@@ -23,12 +24,14 @@ export default class User extends Component {
             emailError: false,
             displaySuccess: false,
             displayErrors: false,
-            errors: []
+            errors: [],
+            isLoading: false,
+            loadingMessage: ''
         };
     }
 
     componentDidMount() {
-
+        this.setState({ isLoading: true, loadingMessage: 'Loading roles ...' });
         let data = {};
 
         fetch(`${Kastra.API_URL}/api/role/list`, 
@@ -40,7 +43,8 @@ export default class User extends Component {
             .then(
                 (result) => {
                     data.roleOptions = [];
-                    
+                    data.isLoading = false;
+
                     result.forEach(function (element) {
                         data.roleOptions.push({
                             id: element.id,
@@ -61,6 +65,8 @@ export default class User extends Component {
     }
 
     fetchUser(data) {
+        this.setState({ isLoading: true, loadingMessage: 'Loading user ...' });
+
         fetch(`${Kastra.API_URL}/api/user/get/${this.state.userId}`, 
                 {
                     method: 'GET',
@@ -71,6 +77,7 @@ export default class User extends Component {
                 (result) => {
                     data.email = result.email;
                     data.roles = result.roles;
+                    data.isLoading = false;
 
                     if(data.roleOptions.length > 0) {
                         data.roleOptions = this.setCheckBoxValues(data.roleOptions, data.roles);
@@ -174,6 +181,7 @@ export default class User extends Component {
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
+                <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">Edit the user</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">{userTitle}</h2>

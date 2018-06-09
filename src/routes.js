@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom'
+import Home from './components/home/home'
 import Settings from './components/siteconfiguration/settings'
 import Module from './components/module/module'
 import ModuleList from './components/module/modulelist'
@@ -15,7 +16,7 @@ import PermissionList from './components/user/permissionlist'
 export const Routes = () => (
   <main>
     <Switch>
-      <Route exact path='/admin/' component={Settings}/>
+      <Route exact path='/admin/' component={Home}/>
       <Route exact path='/admin/modules/edit' component={Module}/>
       <Route path='/admin/modules/edit/:moduleId?' component={Module}/>
       <Route path='/admin/modules/new/:pageId?' component={Module}/>

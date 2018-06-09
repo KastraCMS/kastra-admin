@@ -3,6 +3,7 @@ import Message from '../common/message'
 import SingleInput from '../common/singleinput'
 import CheckboxInput from '../common/checkboxinput';
 import * as Kastra from '../../constants'
+import Loading from '../common/loading';
 
 export default class Settings extends Component {
 
@@ -13,7 +14,9 @@ export default class Settings extends Component {
             description: '', 
             hostUrl: '', 
             cacheActivated: false,
-            displaySuccess: false
+            displaySuccess: false,
+            isLoading: false,
+            loadingMessage: ''
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -38,6 +41,7 @@ export default class Settings extends Component {
     }
 
     fetchSiteConfiguration(data) {
+        this.setState({ isLoading: true, loadingMessage: 'Loading settings ...' });
         fetch(`${Kastra.API_URL}/api/siteconfiguration/get`, 
                 {
                     method: 'GET',
@@ -50,10 +54,12 @@ export default class Settings extends Component {
                     data.description = result.description || '';
                     data.hostUrl = result.hostUrl || ''; 
                     data.cacheActivated = result.cacheActivated || false;
-
+                    data.isLoading = false;
+                    
                     this.setState(data);
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
@@ -67,6 +73,8 @@ export default class Settings extends Component {
         data.description = this.state.description;
         data.hostUrl = this.state.hostUrl; 
         data.cacheActivated = this.state.cacheActivated;
+        
+        this.setState({isLoading: true, loadingMessage: 'Save settings ...'});
 
         fetch(`${Kastra.API_URL}/api/siteconfiguration/update`, 
             {
@@ -85,6 +93,7 @@ export default class Settings extends Component {
                     this.fetchSiteConfiguration(data);
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
@@ -96,6 +105,7 @@ export default class Settings extends Component {
     render() {
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
+                <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">Configure your website</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">Site settings</h2>                

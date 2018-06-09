@@ -4,6 +4,7 @@ import SingleInput from '../common/singleinput'
 import SelectInput from '../common/selectinput'
 import CheckboxInput from '../common/checkboxinput';
 import * as Kastra from '../../constants'
+import Loading from '../common/loading';
 
 export default class Module extends Component {
 
@@ -26,7 +27,9 @@ export default class Module extends Component {
             displaySuccess: false,
             displayErrors: false,
             permissionOptions: [],
-            permissions: []
+            permissions: [],
+            isLoading: false,
+            loadingMessage: ''
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -39,7 +42,9 @@ export default class Module extends Component {
     componentDidMount() {
         let data = {};
 
-        fetch(`${Kastra.API_URL}/api/moduledefinition/list`, 
+        this.setState({ isLoading: true, loadingMessage: 'Loading module definitions ...' });
+
+        fetch(`${Kastra.API_URL}/api/moduledefinition/list`,
                 {
                     method: 'GET',
                     credentials: 'include'
@@ -47,6 +52,7 @@ export default class Module extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    data.isLoading = false;
                     data.definitionOptions = [];
                     
                     result.forEach(function (element) {
@@ -59,11 +65,14 @@ export default class Module extends Component {
                     this.fetchPlaceholders(data);
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
 
     fetchModule(data) {
+        this.setState({ isLoading: true, loadingMessage: 'Loading module ...' });
+
         fetch(`${Kastra.API_URL}/api/module/get/${this.state.moduleId}`, 
                 {
                     method: 'GET',
@@ -77,6 +86,7 @@ export default class Module extends Component {
                     data.pageId = result.pageId;
                     data.placeId = result.placeId;
                     data.permissions = result.permissions;
+                    data.isLoading = false;
 
                     if(data.permissionOptions.length > 0) {
                         data.permissionOptions = this.setCheckBoxValues(data.permissionOptions, data.permissions);
@@ -85,11 +95,14 @@ export default class Module extends Component {
                     this.setState(data);
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
 
     fetchPlaceholders(data) {
+        this.setState({ isLoading: true, loadingMessage: 'Loading places ...' });
+
         fetch(`${Kastra.API_URL}/api/place/listbypageid/${this.state.pageId}`, 
                 {
                     method: 'GET',
@@ -98,6 +111,7 @@ export default class Module extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    data.isLoading = false;
                     data.placeOptions = [];
                     
                     result.forEach(function (element) {
@@ -110,11 +124,14 @@ export default class Module extends Component {
                     this.fetchPermissions(data);
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
 
     fetchPermissions(data) {
+        this.setState({ isLoading: true, loadingMessage: 'Loading permissions ...' });
+
         fetch(`${Kastra.API_URL}/api/permission/list`, 
                 {
                     method: 'GET',
@@ -123,6 +140,7 @@ export default class Module extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    data.isLoading = false;
                     data.permissionOptions = [];
                     
                     result.forEach(function (element) {
@@ -139,6 +157,7 @@ export default class Module extends Component {
                     }
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
@@ -221,6 +240,8 @@ export default class Module extends Component {
 
             this.setState(newState);
         } else {
+            this.setState({ isLoading: true, loadingMessage: 'Saving module ...' });
+
             let data = {};
             data.id = this.state.moduleId;
             data.name = this.state.name;
@@ -243,6 +264,8 @@ export default class Module extends Component {
                 () => {
                     newState.displayErrors = false;
                     newState.displaySuccess = true;
+                    newState.isLoading = false;
+                    
                     this.fetchModule(newState);
                 }
             ).catch(function(error) {
@@ -272,6 +295,7 @@ export default class Module extends Component {
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
+                <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">Edit the module and manage the permissions</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">{moduleTitle}</h2>

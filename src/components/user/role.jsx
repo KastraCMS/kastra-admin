@@ -3,6 +3,7 @@ import Message from '../common/message'
 import SingleInput from '../common/singleinput'
 import CheckboxInput from '../common/checkboxinput';
 import * as Kastra from '../../constants'
+import Loading from '../common/loading';
 
 export default class Role extends Component {
 
@@ -24,12 +25,15 @@ export default class Role extends Component {
             nameError: false,
             displaySuccess: false,
             displayErrors: false,
-            errors: []
+            errors: [],
+            isLoading: true,
+            loadingMessage: ''
         };
     }
 
     componentDidMount() {
         let data = {};
+        this.setState({ isLoading: true, loadingMessage: 'Loading permissions ...'});
 
         fetch(`${Kastra.API_URL}/api/permission/list`, 
                 {
@@ -40,6 +44,7 @@ export default class Role extends Component {
             .then(
                 (result) => {
                     data.permissionOptions = [];
+                    data.isLoading = false;
                     
                     result.forEach(function (element) {
                         data.permissionOptions.push({
@@ -55,11 +60,15 @@ export default class Role extends Component {
                     }
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
 
     fetchRole(data) {
+
+        this.setState({ isLoading: true, loadingMessage: 'Loading roles ...' });
+
         fetch(`${Kastra.API_URL}/api/role/get/${this.state.roleId}`, 
                 {
                     method: 'GET',
@@ -69,6 +78,7 @@ export default class Role extends Component {
             .then(
                 (result) => {
                     data.name = result.name;
+                    data.isLoading = false;
 
                     if(data.permissionOptions.length > 0) {
                         data.permissionOptions = this.setCheckBoxValues(data.permissionOptions, data.permissions);
@@ -77,6 +87,7 @@ export default class Role extends Component {
                     this.setState(data);
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false })
                 console.log('Error: \n', error);
             });
     }
@@ -131,7 +142,7 @@ export default class Role extends Component {
         let newState = {};
 
         event.preventDefault();
-
+        
         if (this.state.email.length === 0) {
             errorMessages.push("Email address can't be empty");
             newState.emailError = true;
@@ -172,6 +183,7 @@ export default class Role extends Component {
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
+                <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">Edit the role</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">{roleTitle}</h2>

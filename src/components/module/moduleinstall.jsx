@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ConfirmDialog from '../common/confirmdialog';
 import * as Kastra from '../../constants'
+import Loading from '../common/loading';
 
 export default class ModuleInstall extends Component {
 
@@ -8,11 +9,15 @@ export default class ModuleInstall extends Component {
         super(props);
 
         this.state = { 
-            modules: []
+            modules: [],
+            isLoading: false,
+            loadingMessage: ''
          };
     }
 
     componentDidMount() {
+        this.setState({ isLoading: true, loadingMessage: 'Loading modules ...' });
+
         fetch(`${Kastra.API_URL}/api/moduledefinition/modulefound`, 
                 {
                     method: 'GET',
@@ -22,16 +27,20 @@ export default class ModuleInstall extends Component {
             .then(
                 (result) => {
                     this.setState({
-                        modules: result
+                        modules: result,
+                        isLoading: false
                     });
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
 
     handleInstall(event, assemblyName) {
         event.preventDefault();
+
+        this.setState({ isLoading: true, loadingMessage: 'Installing module ...' });
 
         fetch(`${Kastra.API_URL}/api/moduledefinition/install`, 
         {
@@ -48,12 +57,15 @@ export default class ModuleInstall extends Component {
                 this.componentDidMount();
             }
         ).catch(function(error) {
+            this.setState({ isLoading: false });
             console.log('Error: \n', error);
         });
     }
 
     handleUninstall(event, assemblyName, moduleDefinitionId) {
         event.preventDefault();
+
+        this.setState({ isLoading: true, loadingMessage: 'Uninstalling module ...' });
 
         const data = { name: assemblyName, id: moduleDefinitionId };
         fetch(`${Kastra.API_URL}/api/moduledefinition/uninstall`, 
@@ -71,6 +83,7 @@ export default class ModuleInstall extends Component {
                 this.componentDidMount();
             }
         ).catch(function(error) {
+            this.setState({ isLoading: false });
             console.log('Error: \n', error);
         });
     }
@@ -125,6 +138,7 @@ export default class ModuleInstall extends Component {
     render() {
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
+                <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">All your website module definition</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">Module definition list</h2>

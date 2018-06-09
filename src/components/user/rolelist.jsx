@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import ConfirmDialog from '../common/confirmdialog';
 import * as Kastra from '../../constants';
+import Loading from '../common/loading';
 
 export default class RoleList extends Component {
 
@@ -9,12 +10,16 @@ export default class RoleList extends Component {
         super(props);
 
         this.state = { 
-            roles: []
+            roles: [],
+            isLoading: false,
+            loadingMessage: ''
         };
         this.handleDelete = this.handleDelete.bind(this);
     }
 
     componentDidMount() {
+        this.setState({ isLoading: true, loadingMessage: 'Loading roles ...' });
+
         fetch(`${Kastra.API_URL}/api/role/list`, 
         {
             method: 'GET',
@@ -24,15 +29,19 @@ export default class RoleList extends Component {
         .then(
             (result) => {
             this.setState({
-                roles: result
+                roles: result,
+                isLoading: false
             });
             }
         ).catch(function(error) {
+            this.setState({ isLoading: false });
             console.log('Error: \n', error);
         });
     }
 
     handleDelete(id) {
+        this.setState({ isLoading: true, loadingMessage: 'Deleting role ...' });
+
         fetch(`${Kastra.API_URL}/api/role/delete`, 
         {
             method: 'DELETE',
@@ -48,6 +57,7 @@ export default class RoleList extends Component {
                 this.componentDidMount();
             }
         ).catch(function(error) {
+            this.setState({ isLoading: false });
             console.log('Error: \n', error);
         });
     }
@@ -87,6 +97,7 @@ export default class RoleList extends Component {
     render() {
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
+                <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">All roles of your website</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">Role list</h2>

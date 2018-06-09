@@ -4,6 +4,7 @@ import SingleInput from '../common/singleinput'
 import SelectInput from '../common/selectinput'
 import TextInput from '../common/textinput'
 import * as Kastra from '../../constants'
+import Loading from '../common/loading';
 
 export default class Page extends Component {
 
@@ -29,7 +30,9 @@ export default class Page extends Component {
             displaySuccess: false,
             displayErrors: false,
             templateOptions: [],
-            errors: []
+            errors: [],
+            isLoading: false,
+            loadingMessage: ''
         };
     }
 
@@ -45,7 +48,8 @@ export default class Page extends Component {
             .then(
                 (result) => {
                     data.templateOptions = [];
-                    
+                    data.isLoading = false;
+
                     result.forEach(function (element) {
                         data.templateOptions.push({
                             name: element.name,
@@ -60,11 +64,14 @@ export default class Page extends Component {
                     }
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
 
     fetchPage(data) {
+        this.setState({ isLoading: true, loadingMessage: 'Loading page ...' });
+
         fetch(`${Kastra.API_URL}/api/page/get/${this.state.pageId}`, 
                 {
                     method: 'GET',
@@ -79,10 +86,12 @@ export default class Page extends Component {
                         data.metaKeywords = result.metaKeywords;
                         data.metaDescription = result.metaDescription;
                         data.metaRobot= result.metaRobot;
+                        data.isLoading = false;
 
                         this.setState(data);
                     }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
@@ -105,6 +114,8 @@ export default class Page extends Component {
         let data = {};
 
         event.preventDefault();
+
+        this.setState({ isLoading: true, loadingMessage: 'Saving page ...' });
 
         if (this.state.title.length === 0) {
             errorMessages.push("Title can't be empty");
@@ -156,9 +167,11 @@ export default class Page extends Component {
             .then(
                 () => {
                     newState.displaySuccess = true;
+                    newState.isLoading = false;
                     this.fetchPage(newState);
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
         }
@@ -177,6 +190,7 @@ export default class Page extends Component {
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
+                <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">Edit the page settings and manage its modules</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">{pageTitle}</h2>

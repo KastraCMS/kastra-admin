@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import ConfirmDialog from '../common/confirmdialog';
 import * as Kastra from '../../constants'
+import Loading from '../common/loading';
 
 export default class ModuleList extends Component {
 
@@ -10,11 +11,15 @@ export default class ModuleList extends Component {
 
         this.state = { 
             pageId: props.match.params.pageId || 0,
-            modules: []
+            modules: [],
+            isLoading: false,
+            loadingMessage: ''
          };
     }
 
     componentDidMount() {
+        this.setState({ isLoading: true, loadingMessage: 'Loading modules ...' });
+
         fetch(`${Kastra.API_URL}/api/module/list`, 
                 {
                     method: 'GET',
@@ -24,15 +29,19 @@ export default class ModuleList extends Component {
             .then(
                 (result) => {
                     this.setState({
-                        modules: result
+                        modules: result,
+                        isLoading: false
                     });
                 }
             ).catch(function(error) {
+                this.setState({ isLoading: false });
                 console.log('Error: \n', error);
             });
     }
 
     handleDelete(id) {
+        this.setState({ isLoading: true, loadingMessage: 'Deleting module ...' });
+
         fetch(`${Kastra.API_URL}/api/module/delete`, 
         {
             method: 'DELETE',
@@ -48,6 +57,7 @@ export default class ModuleList extends Component {
                 this.componentDidMount();
             }
         ).catch(function(error) {
+            this.setState({ isLoading: false });
             console.log('Error: \n', error);
         });
     }
@@ -97,6 +107,7 @@ export default class ModuleList extends Component {
     render() {
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
+                <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">All your website module</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">Module list</h2>

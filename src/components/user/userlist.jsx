@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import ConfirmDialog from '../common/confirmdialog';
 import * as Kastra from '../../constants';
+import Loading from '../common/loading';
 
 export default class UserList extends Component {
 
@@ -9,12 +10,17 @@ export default class UserList extends Component {
         super(props);
 
         this.state = { 
-            users: []
+            users: [],
+            isLoading: false,
+            loadingMessage: ''
         };
+
         this.handleDelete = this.handleDelete.bind(this);
     }
 
     componentDidMount() {
+        this.setState({ isLoading: true, loadingMessage: 'Loading users ...' });
+
         fetch(`${Kastra.API_URL}/api/user/list`, 
         {
             method: 'GET',
@@ -24,15 +30,19 @@ export default class UserList extends Component {
         .then(
             (result) => {
             this.setState({
-                users: result
+                users: result,
+                isLoading: false
             });
             }
         ).catch(function(error) {
+            this.setState({ isLoading: false });
             console.log('Error: \n', error);
         });
     }
 
     handleDelete(id) {
+        this.setState({ isLoading: true, loadingMessage: 'Deleting user ...' });
+
         fetch(`${Kastra.API_URL}/api/user/delete`, 
         {
             method: 'DELETE',
@@ -48,6 +58,7 @@ export default class UserList extends Component {
                 this.componentDidMount();
             }
         ).catch(function(error) {
+            this.setState({ isLoading: false });
             console.log('Error: \n', error);
         });
     }
@@ -88,6 +99,7 @@ export default class UserList extends Component {
     render() {
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
+                <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">All users of your website</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">User list</h2>
