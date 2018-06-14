@@ -80,7 +80,7 @@ export default class RoleList extends Component {
                         <td>{role.name}</td>
                         <td><Link to={`/admin/users/role/${role.id}`}><span className="ion-compose"></span></Link></td>
                         <td>
-                            <a href="" onClick={this.handleDelete} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
+                            <a href="" data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
                             <ConfirmDialog id={dialogId} 
                                 title="Delete role"
                                 message={`Are you sure you want to delete "${role.name}" ?`}

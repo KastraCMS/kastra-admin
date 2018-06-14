@@ -143,11 +143,11 @@ export default class Role extends Component {
 
         event.preventDefault();
         
-        if (this.state.email.length === 0) {
-            errorMessages.push("Email address can't be empty");
-            newState.emailError = true;
+        if (this.state.name.length === 0) {
+            errorMessages.push("Name cannot be empty");
+            newState.nameError = true;
         } else {
-            newState.emailError = false;
+            newState.nameError = false;
         }
 
         if(errorMessages.length > 0) {
@@ -159,7 +159,31 @@ export default class Role extends Component {
             newState.displaySuccess = true;
         }
 
-        this.setState(newState);
+        let data = {};
+        data.id = this.state.roleId;
+        data.name = this.state.name;
+        data.permissions = this.state.permissions;
+
+        fetch(`${Kastra.API_URL}/api/role/update`, 
+        {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(
+            () => {
+                newState.displaySuccess = true;
+                newState.isLoading = false;
+                this.fetchRole(newState);
+            }
+        ).catch(function(error) {
+            this.setState({ isLoading: false });
+            console.log('Error: \n', error);
+        });
     }
 
     closeSuccessMessage() {
@@ -179,7 +203,7 @@ export default class Role extends Component {
     }
 
     render() {
-        let roleTitle = (this.state.roleIdlength > 0) ? 'Edit role' : 'New role';
+        let roleTitle = (this.state.roleId !== undefined) ? 'Edit role' : 'New role';
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
@@ -192,7 +216,7 @@ export default class Role extends Component {
                 <form onSubmit={this.handleSubmit}>
 
                     <h3 className="mt-5 mb-3">General</h3>
-                    <SingleInput type="text" onChange={this.handleChange} displayError={this.state.nameError} title="Name * :" name="name" value={this.state.name} />
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.nameError} title="Name * :" name="name" value={this.state.name} />
 
                     <h3 className="mt-5 mb-3">Permissions</h3>
                     {this.renderPermissions()}
