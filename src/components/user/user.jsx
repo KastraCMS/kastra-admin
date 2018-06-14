@@ -18,10 +18,15 @@ export default class User extends Component {
 
         this.state = { 
             userId: props.match.params.userId,
+            userName: '',
             email: '',
+            password: '',
+            confirmPassword: '',
             roles: [],
             roleOptions: [],
             emailError: false,
+            passwordError: false,
+            userNameError: false,
             displaySuccess: false,
             displayErrors: false,
             errors: [],
@@ -67,6 +72,12 @@ export default class User extends Component {
     fetchUser(data) {
         this.setState({ isLoading: true, loadingMessage: 'Loading user ...' });
 
+        if(this.state.userId === undefined) {
+            data.isLoading = false;
+            this.setState(data);
+            return;
+        }
+        
         fetch(`${Kastra.API_URL}/api/user/get/${this.state.userId}`, 
                 {
                     method: 'GET',
@@ -75,6 +86,7 @@ export default class User extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    data.userName = result.userName;
                     data.email = result.email;
                     data.roles = result.roles;
                     data.isLoading = false;
@@ -118,7 +130,7 @@ export default class User extends Component {
         let roles = this.state.roles;
         let options = this.state.roleOptions;
         const target = event.target;
-        const value = parseInt(target.value, 10);
+        const value = target.value;
         const isChecked = target.checked;
         const index = roles.indexOf(value);
 
@@ -140,6 +152,13 @@ export default class User extends Component {
         let newState = {};
 
         event.preventDefault();
+        
+        if (this.state.userName.length === 0) {
+            errorMessages.push("Username can't be empty");
+            newState.userNameError = true;
+        } else {
+            newState.userNameError = false;
+        }
 
         if (this.state.email.length === 0) {
             errorMessages.push("Email address can't be empty");
@@ -148,16 +167,59 @@ export default class User extends Component {
             newState.emailError = false;
         }
 
+        if(this.state.userId === undefined && this.state.password !== this.state.confirmPassword) {
+            errorMessages.push("Password fields must be identic");
+            newState.passwordError = true;
+        } else {
+            newState.passwordError = false;
+        }
+
         if(errorMessages.length > 0) {
             newState.errors = errorMessages;
             newState.displayErrors = true;
             newState.displaySuccess = false;
+
+            this.setState(newState);
+            return;
         } else {
             newState.displayErrors = false;
             newState.displaySuccess = true;
         }
 
-        this.setState(newState);
+        let data = {};
+        data.id = this.state.userId;
+        data.userName = this.state.userName;
+        data.email = this.state.email;
+        data.roles = this.state.roles;
+        data.password = this.state.password;
+
+        fetch(`${Kastra.API_URL}/api/user/update`, 
+        {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                if(!result.succeeded) {
+                    let errorMessages = [];
+                    for(let i = 0; i < result.errors.length; i++) {
+                        errorMessages.push(result.errors[i].description);
+                    }
+                    this.setState({ isLoading: false, displayErrors: true, errors: errorMessages });
+                } else {
+                    newState.displaySuccess = true;
+                    newState.isLoading = false;
+                    newState.userId = result;
+                    this.setState(newState);
+                }
+            }
+        );
     }
 
     closeSuccessMessage() {
@@ -176,8 +238,21 @@ export default class User extends Component {
         })
     }
 
+    renderPassword() {
+        if(this.state.userId !== undefined) {
+            return (null);
+        }
+
+        return (
+            <div>
+                <SingleInput type="password" handleChange={this.handleChange} displayError={this.state.passwordError} title="Password * :" name="password" value={this.state.password} />
+                <SingleInput type="password" handleChange={this.handleChange} displayError={this.state.passwordError} title="Confirm password * :" name="confirmPassword" value={this.state.confirmPassword} />          
+            </div>
+        );
+    }
+
     render() {
-        let userTitle = (this.state.userId.length > 0) ? 'Edit user' : 'New user';
+        let userTitle = (this.state.userId !== undefined) ? 'Edit user' : 'New user';
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
@@ -190,7 +265,9 @@ export default class User extends Component {
                 <form onSubmit={this.handleSubmit}>
 
                     <h3 className="mt-5 mb-3">General</h3>
-                    <SingleInput type="text" onChange={this.handleChange} displayError={this.state.emailError} title="Email address * :" name="email" value={this.state.email} />
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.userNameError} title="Username * :" name="userName" value={this.state.userName} />
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.emailError} title="Email address * :" name="email" value={this.state.email} />
+                    {this.renderPassword()}
 
                     <h3 className="mt-5 mb-3">Roles</h3>
                     {this.renderRoles()}
