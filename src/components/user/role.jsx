@@ -70,26 +70,25 @@ export default class Role extends Component {
         this.setState({ isLoading: true, loadingMessage: 'Loading roles ...' });
 
         fetch(`${Kastra.API_URL}/api/role/get/${this.state.roleId}`, 
-                {
-                    method: 'GET',
-                    credentials: 'include'
-                })
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    data.name = result.name;
-                    data.isLoading = false;
+        {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then(res => res.json())
+        .then((result) => {
+            data.name = result.name;
+            data.isLoading = false;
 
-                    if(data.permissionOptions.length > 0) {
-                        data.permissionOptions = this.setCheckBoxValues(data.permissionOptions, data.permissions);
-                    }
+            if(data.permissionOptions.length > 0) {
+                data.permissionOptions = this.setCheckBoxValues(data.permissionOptions, data.permissions);
+            }
 
-                    this.setState(data);
-                }
-            ).catch(function(error) {
-                this.setState({ isLoading: false })
-                console.log('Error: \n', error);
-            });
+            this.setState(data);
+        }
+        ).catch(function(error) {
+            this.setState({ isLoading: false })
+            console.log('Error: \n', error);
+        });
     }
 
     setCheckBoxValues(options, values) {
@@ -174,11 +173,14 @@ export default class Role extends Component {
             },
             body: JSON.stringify(data)
         })
+        .then(res => res.json())
         .then(
-            () => {
+            (result) => {
                 newState.displaySuccess = true;
                 newState.isLoading = false;
-                this.fetchRole(newState);
+                newState.roleId = result.roleId;
+                
+                this.setState(newState);
             }
         ).catch(function(error) {
             this.setState({ isLoading: false });
