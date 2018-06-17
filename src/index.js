@@ -6,6 +6,7 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom'
 import { Routes } from './routes'
 import NavigationSide from './components/navigation/navigationside' 
+import NavigationHeader from './components/navigation/navigationheader';
 
 class App extends React.Component {
   render() {
@@ -30,11 +31,7 @@ class App extends React.Component {
               </ul>
           </nav>
           <div id="content">
-                <nav className="navbar navbar-dark bg-dark">
-                    <button type="button" id="sidebarCollapse" className="btn btn-outline-info navbar-btn">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                </nav>
+                <NavigationHeader />
                 <div id="root">
                   <Routes />  
                 </div>

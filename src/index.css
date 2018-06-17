@@ -291,6 +291,30 @@ ul.CTAs a {
     font-size: 0.8rem;
 }
 
+#navigation-header ul {
+    margin: 0 20px;
+    line-height: 1.5;
+}
+
+#navigation-header ul li a {
+    color: #fff;
+    text-align: center;
+    font-size: 0.85em;
+    display: block;
+    width: 2.5rem;
+}
+
+#navigation-header ul li a:hover {
+    background-color: #414850;
+    border-radius: 1.5rem;
+}
+
+#navigation-header ul li a i {
+    display: block;
+    font-size: 1.8em;
+    height: 100%;
+}
+
 /* ---------------------------------------------------
     LOADER
 ----------------------------------------------------- */
