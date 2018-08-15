@@ -4,6 +4,7 @@
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
+    letter-spacing: 1px;
 }
 
 p {
@@ -276,13 +277,27 @@ ul.CTAs a {
     text-transform: uppercase;
 }
 
+#root h5 {
+    font-weight: 300;
+}
+
 #root hr {
     background-color: #fff;
     margin-bottom: 2rem;
 }
 
-#root .table-dark th, #root .table-dark td, #root .table-dark thead th {
-    border-color: #1997c6;
+#root .table-dark thead tr, #root .table-dark tbody tr {
+    border: 1px solid #434857;
+    padding: 4px;
+}
+
+#root td {
+    color: #cfd2da;
+}
+
+#root td, #root th {
+    border: none !important;
+    font-weight: 300;
 }
 
 #root .table-dark th {
@@ -290,6 +305,10 @@ ul.CTAs a {
     letter-spacing: .25rem;
     font-size: 0.8rem;
 }
+
+/* ---------------------------------------------------
+    NAVIGATION
+----------------------------------------------------- */
 
 #navigation-header ul {
     margin: 0 20px;
@@ -406,4 +425,12 @@ ul.CTAs a {
 #loader-component .message {
     position: relative;
     margin: 10px auto;
+}
+
+/* ---------------------------------------------------
+    COMPONENT CUSTOM
+----------------------------------------------------- */
+
+#visits-chart {
+    max-height: 550px;
 }
