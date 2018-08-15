@@ -7,7 +7,14 @@ export default class Home extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { data: {}, stats: {}, visits: [], recentUsers: [] };
+        this.state = { 
+            data: {}, 
+            stats: {}, 
+            visits: [], 
+            recentUsers: [],
+            applicationVersion: '',
+            coreVersion: ''
+         };
     }
 
     componentDidMount() {
@@ -15,6 +22,7 @@ export default class Home extends Component {
         this.fetchGlobalStats();
         this.fetchVisits();
         this.fetchRecentUsers();
+        this.fetchVersions();
     }
 
     fetchGraphData() {
@@ -79,6 +87,25 @@ export default class Home extends Component {
             ).catch(function(error) {
                 console.log('Error: \n', error);
             });
+    }
+
+    fetchVersions() {
+        fetch(`${Kastra.API_URL}/api/SiteConfiguration/GetApplicationVersions`, 
+            {
+                method: 'GET',
+                credentials: 'include'
+            })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.setState({ 
+                    applicationVersion: result.applicationVersion,
+                    coreVersion: result.coreVersion
+                    });
+            }
+        ).catch(function(error) {
+            console.log('Error: \n', error);
+        });
     }
 
     renderVisitsTable() {
@@ -168,8 +195,13 @@ export default class Home extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col">
-                                <div className="bg-dark mb-4 p-4">
-                                    <p>Welcome to your web administration !</p>
+                                <div className="bg-dark mb-4 p-4">                                  
+                                    <blockquote class="blockquote">
+                                        <p>Welcome to your web administration !</p>
+                                        <footer class="blockquote-footer text-right">
+                                            <small>Kastra website (v{this.state.applicationVersion}) based on Kastra Core (v{this.state.coreVersion})</small>
+                                        </footer>
+                                    </blockquote>
                                 </div>
                             </div>
                         </div>
