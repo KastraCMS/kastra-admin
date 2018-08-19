@@ -164,11 +164,13 @@ export default class Page extends Component {
                 },
                 body: JSON.stringify(data)
             })
-            .then(
-                () => {
+            .then(res => res.json())
+            .then((result) => {
                     newState.displaySuccess = true;
                     newState.isLoading = false;
-                    this.fetchPage(newState);
+                    newState.pageId = result.pageId;
+
+                    this.setState(newState);
                 }
             ).catch(function(error) {
                 this.setState({ isLoading: false });
