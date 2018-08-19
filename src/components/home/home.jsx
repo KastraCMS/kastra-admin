@@ -196,9 +196,9 @@ export default class Home extends Component {
                         <div className="row">
                             <div className="col">
                                 <div className="bg-dark mb-4 p-4">                                  
-                                    <blockquote class="blockquote">
+                                    <blockquote className="blockquote">
                                         <p>Welcome to your web administration !</p>
-                                        <footer class="blockquote-footer text-right">
+                                        <footer className="blockquote-footer text-right">
                                             <small>Kastra website (v{this.state.applicationVersion}) based on Kastra Core (v{this.state.coreVersion})</small>
                                         </footer>
                                     </blockquote>
