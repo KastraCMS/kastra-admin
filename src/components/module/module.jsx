@@ -260,13 +260,14 @@ export default class Module extends Component {
                 },
                 body: JSON.stringify(data)
             })
-            .then(
-                () => {
+            .then(res => res.json())
+            .then((result) => {
                     newState.displayErrors = false;
                     newState.displaySuccess = true;
                     newState.isLoading = false;
-                    
-                    this.fetchModule(newState);
+                    newState.moduleId = result.moduleId;
+
+                    this.setState(newState);
                 }
             ).catch(function(error) {
                 console.log('Error: \n', error);

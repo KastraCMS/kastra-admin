@@ -15,6 +15,8 @@ export default class ModuleList extends Component {
             isLoading: false,
             loadingMessage: ''
          };
+
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     componentDidMount() {
@@ -91,7 +93,7 @@ export default class ModuleList extends Component {
                         </td>
                         <td><Link to={`/admin/modules/edit/${module.id}`}><span className="ion-compose"></span></Link></td>
                         <td>
-                            <a href="" onClick={this.handleDelete} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
+                            <a href="" data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
                             <ConfirmDialog id={dialogId} 
                                 title="Delete module"
                                 message={`Are you sure you want to uninstall "${module.name}" ?`}
@@ -112,7 +114,9 @@ export default class ModuleList extends Component {
                 <h4 className="text-center">All your website module</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">Module list</h2>
-                <Link to={`/admin/modules/new/${this.state.pageId}`} className="btn btn-outline-info mb-5">New module</Link>
+                {this.state.pageId > 0 && 
+                    <Link to={`/admin/modules/new/${this.state.pageId}`} className="btn btn-outline-info mb-5">New module</Link>}
+                
                 <div className="float-right">
                     <Link to={'/admin/modules/install'} className="btn btn-outline-info mb-5">Manage module definitions</Link>
                 </div>
