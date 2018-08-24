@@ -18,7 +18,6 @@ export default class User extends Component {
 
         this.state = { 
             userId: props.match.params.userId,
-            userName: '',
             email: '',
             password: '',
             confirmPassword: '',
@@ -26,7 +25,6 @@ export default class User extends Component {
             roleOptions: [],
             emailError: false,
             passwordError: false,
-            userNameError: false,
             displaySuccess: false,
             displayErrors: false,
             errors: [],
@@ -86,7 +84,6 @@ export default class User extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    data.userName = result.userName;
                     data.email = result.email;
                     data.roles = result.roles;
                     data.isLoading = false;
@@ -152,13 +149,6 @@ export default class User extends Component {
         let newState = {};
 
         event.preventDefault();
-        
-        if (this.state.userName.length === 0) {
-            errorMessages.push("Username can't be empty");
-            newState.userNameError = true;
-        } else {
-            newState.userNameError = false;
-        }
 
         if (this.state.email.length === 0) {
             errorMessages.push("Email address can't be empty");
@@ -188,7 +178,6 @@ export default class User extends Component {
 
         let data = {};
         data.id = this.state.userId;
-        data.userName = this.state.userName;
         data.email = this.state.email;
         data.roles = this.state.roles;
         data.password = this.state.password;
@@ -265,7 +254,6 @@ export default class User extends Component {
                 <form onSubmit={this.handleSubmit}>
 
                     <h3 className="mt-5 mb-3">General</h3>
-                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.userNameError} title="Username * :" name="userName" value={this.state.userName} />
                     <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.emailError} title="Email address * :" name="email" value={this.state.email} />
                     {this.renderPassword()}
 
