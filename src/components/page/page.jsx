@@ -109,7 +109,7 @@ export default class Page extends Component {
 
     handleSubmit(event) {
 
-        const errorMessages = [];
+        let errorMessages = [];
         let newState = {};
         let data = {};
 
