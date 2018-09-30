@@ -5,8 +5,9 @@ import SelectInput from '../common/selectinput'
 import CheckboxInput from '../common/checkboxinput';
 import * as Kastra from '../../constants'
 import Loading from '../common/loading';
+import { translate } from 'react-i18next';
 
-export default class Module extends Component {
+class Module extends Component {
 
     constructor(props) {
         super(props);
@@ -41,8 +42,9 @@ export default class Module extends Component {
 
     componentDidMount() {
         let data = {};
+        const { t } = this.props;
 
-        this.setState({ isLoading: true, loadingMessage: 'Loading module definitions ...' });
+        this.setState({ isLoading: true, loadingMessage: t('module.loadingModuleDefinitions') });
 
         fetch(`${Kastra.API_URL}/api/moduledefinition/list`,
                 {
@@ -71,7 +73,9 @@ export default class Module extends Component {
     }
 
     fetchModule(data) {
-        this.setState({ isLoading: true, loadingMessage: 'Loading module ...' });
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('module.loading')});
 
         fetch(`${Kastra.API_URL}/api/module/get/${this.state.moduleId}`, 
                 {
@@ -101,7 +105,9 @@ export default class Module extends Component {
     }
 
     fetchPlaceholders(data) {
-        this.setState({ isLoading: true, loadingMessage: 'Loading places ...' });
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('module.loadingPlaces') });
 
         fetch(`${Kastra.API_URL}/api/place/listbypageid/${this.state.pageId}`, 
                 {
@@ -130,7 +136,9 @@ export default class Module extends Component {
     }
 
     fetchPermissions(data) {
-        this.setState({ isLoading: true, loadingMessage: 'Loading permissions ...' });
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('module.loadingPermissions')});
 
         fetch(`${Kastra.API_URL}/api/permission/list`, 
                 {
@@ -207,27 +215,28 @@ export default class Module extends Component {
     }
 
     handleSubmit(event) {
+        const { t } = this.props; 
         const errorMessages = [];
         let newState = {};
 
         event.preventDefault();
 
         if (this.state.name.length === 0) {
-            errorMessages.push("Name can't be empty");
+            errorMessages.push(t('module.emptyName'));
             newState.nameError = true;
         } else {
             newState.nameError = false;
         }
 
         if (this.state.definitionId.length === 0) {
-            errorMessages.push("A definition must be selected");
+            errorMessages.push(t('module.emptyDefinition'));
             newState.definitionError = true;
         } else {
             newState.definitionError = false;
         }
 
         if (this.state.placeId.length === 0) {
-            errorMessages.push("A placeholder must be selected");
+            errorMessages.push(t('module.emptyPlaceholder'));
             newState.placeError = true;
         } else {
             newState.placeError = false;
@@ -240,7 +249,7 @@ export default class Module extends Component {
 
             this.setState(newState);
         } else {
-            this.setState({ isLoading: true, loadingMessage: 'Saving module ...' });
+            this.setState({ isLoading: true, loadingMessage: t('module.saving') });
 
             let data = {};
             data.id = this.state.moduleId;
@@ -292,29 +301,32 @@ export default class Module extends Component {
     }
 
     render() {
-        let moduleTitle = (this.state.moduleId > 0) ? `Module : ${this.state.name}` : 'New module';
+        const { t } = this.props;
+        let moduleTitle = (this.state.moduleId > 0) ? `${t('module.module')} : ${this.state.name}` : t('module.newModule');
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
-                <h4 className="text-center">Edit the module and manage the permissions</h4>
+                <h4 className="text-center">{t('module.editTitle')}</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">{moduleTitle}</h2>
-                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message="Page updated with success" />
+                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message={t('module.moduleUpdateSuccess')} />
                 <Message display={this.state.displayErrors} handleClose={this.closeErrorMessage} type="danger" messages={this.state.errors} />
                 <form onSubmit={this.handleSubmit}>
 
-                    <h3 className="mt-5 mb-3">General</h3>
-                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.nameError} title="Name * :" name="name" value={this.state.name} />
-                    <SelectInput label="Module definition * :" placeholder="Select a definition" name="definitionId" displayError={this.state.definitionError} onChange={this.handleChange} options={this.state.definitionOptions} selectedOption={this.state.definitionId} />
-                    <SelectInput label="Placeholder * :" placeholder="Select a placeholder" name="placeId" displayError={this.state.placeError} onChange={this.handleChange} options={this.state.placeOptions} selectedOption={this.state.placeId} />
+                    <h3 className="mt-5 mb-3">{t('module.general')}</h3>
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.nameError} title={`${t('module.name')} *`} name="name" value={this.state.name} />
+                    <SelectInput label={`${t('module.moduleDefinition')} *`} placeholder={t('module.selectDefinition')} name="definitionId" displayError={this.state.definitionError} onChange={this.handleChange} options={this.state.definitionOptions} selectedOption={this.state.definitionId} />
+                    <SelectInput label={`${t('module.placeholder')} *`} placeholder={t('module.selectPlaceholder')} name="placeId" displayError={this.state.placeError} onChange={this.handleChange} options={this.state.placeOptions} selectedOption={this.state.placeId} />
 
-                    <h3 className="mt-5 mb-3">Permissions</h3>
+                    <h3 className="mt-5 mb-3">{t('module.permissions')}</h3>
                     {this.renderPermissions()}
 
-                    <button type="submit" className="btn btn-outline-info mt-5 float-right">Submit</button>
+                    <button type="submit" className="btn btn-outline-info mt-5 float-right">{t('module.submit')}</button>
                 </form>
             </div>
         );
     }
 }
+
+export default translate()(Module);

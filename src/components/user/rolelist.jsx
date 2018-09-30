@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import ConfirmDialog from '../common/confirmdialog';
 import * as Kastra from '../../constants';
 import Loading from '../common/loading';
+import { translate } from 'react-i18next';
 
-export default class RoleList extends Component {
+class RoleList extends Component {
 
     constructor(props) {
         super(props);
@@ -18,7 +19,9 @@ export default class RoleList extends Component {
     }
 
     componentDidMount() {
-        this.setState({ isLoading: true, loadingMessage: 'Loading roles ...' });
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('rolelist.loading')});
 
         fetch(`${Kastra.API_URL}/api/role/list`, 
         {
@@ -40,7 +43,9 @@ export default class RoleList extends Component {
     }
 
     handleDelete(id) {
-        this.setState({ isLoading: true, loadingMessage: 'Deleting role ...' });
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('rolelist.deleting') });
 
         fetch(`${Kastra.API_URL}/api/role/delete`, 
         {
@@ -63,10 +68,12 @@ export default class RoleList extends Component {
     }
 
     renderRoles() {
+        const { t } = this.props;
+
         if(this.state.roles.length === 0) {
             return (
                 <tr>
-                    <td align="center" colSpan="5">No role found</td>
+                    <td align="center" colSpan="5">{t('rolelist.noRoleFound')}</td>
                 </tr>
             );
         }
@@ -82,11 +89,11 @@ export default class RoleList extends Component {
                         <td>
                             <a href="" data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
                             <ConfirmDialog id={dialogId} 
-                                title="Delete role"
-                                message={`Are you sure you want to delete "${role.name}" ?`}
+                                title={t('rolelist.deleteTitle')}
+                                message={`${t('rolelist.deleteMessage')} "${role.name}" ?`}
                                 onConfirm={() => this.handleDelete(role.id)}
-                                confirmLabel="Delete"
-                                cancelLabel="Cancel" />
+                                confirmLabel={t('rolelist.delete')}
+                                cancelLabel={t('rolelist.cancel')} />
                         </td>
                     </tr>
                 );
@@ -95,20 +102,22 @@ export default class RoleList extends Component {
     }
 
     render() {
+        const { t } = this.props;
+
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
-                <h4 className="text-center">All roles of your website</h4>
+                <h4 className="text-center">{t('rolelist.subtitle')}</h4>
                 <hr/>
-                <h2 className="mb-5 text-center">Role list</h2>
-                <Link to={'/admin/users/role'} className="btn btn-outline-info mb-5">New role</Link>
+                <h2 className="mb-5 text-center">{t('rolelist.title')}</h2>
+                <Link to={'/admin/users/role'} className="btn btn-outline-info mb-5">{t('rolelist.newRole')}</Link>
                 <table className="table table-dark bg-dark">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Edit</th>
-                            <th scope="col">Delete</th>
+                            <th scope="col">{t('rolelist.name')}</th>
+                            <th scope="col">{t('rolelist.edit')}</th>
+                            <th scope="col">{t('rolelist.delete')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -119,3 +128,5 @@ export default class RoleList extends Component {
         );
     }
 }
+
+export default translate()(RoleList);

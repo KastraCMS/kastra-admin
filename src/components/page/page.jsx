@@ -5,8 +5,9 @@ import SelectInput from '../common/selectinput'
 import TextInput from '../common/textinput'
 import * as Kastra from '../../constants'
 import Loading from '../common/loading';
+import { translate } from 'react-i18next';
 
-export default class Page extends Component {
+class Page extends Component {
 
     constructor(props) {
         super(props);
@@ -70,7 +71,9 @@ export default class Page extends Component {
     }
 
     fetchPage(data) {
-        this.setState({ isLoading: true, loadingMessage: 'Loading page ...' });
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('page.loading') });
 
         fetch(`${Kastra.API_URL}/api/page/get/${this.state.pageId}`, 
                 {
@@ -108,31 +111,31 @@ export default class Page extends Component {
     }
 
     handleSubmit(event) {
-
+        const { t } = this.props;
         let errorMessages = [];
         let newState = {};
         let data = {};
 
         event.preventDefault();
 
-        this.setState({ isLoading: true, loadingMessage: 'Saving page ...' });
+        this.setState({ isLoading: true, loadingMessage: t('page.saving') });
 
         if (this.state.title.length === 0) {
-            errorMessages.push("Title can't be empty");
+            errorMessages.push(t('page.emptyTitle'));
             newState.titleError = true;
         } else {
             newState.titleError = false;
         }
 
         if (this.state.keyname.length === 0) {
-            errorMessages.push("Keyname can't be empty");
+            errorMessages.push(t('page.emptyKeyname'));
             newState.keynameError = true;
         } else {
             newState.keynameError = false;
         }
 
         if (this.state.templateId.length === 0) {
-            errorMessages.push("A template must be selected");
+            errorMessages.push(t('page.requiredTemplate'));
             newState.templateError = true;
         } else {
             newState.templateError = false;
@@ -188,31 +191,34 @@ export default class Page extends Component {
     }
 
     render() {
-        let pageTitle = (this.state.pageId > 0) ? `Page : ${this.state.title}` : 'New page';
+        const { t } = this.props;
+        let pageTitle = (this.state.pageId > 0) ? `${t('page.page')} : ${this.state.title}` : t('page.newPage');
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
-                <h4 className="text-center">Edit the page settings and manage its modules</h4>
+                <h4 className="text-center">{t('page.subtitle')}</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">{pageTitle}</h2>
-                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message="Page updated with success" />
+                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message={t('page.updateSuccess')} />
                 <Message display={this.state.displayErrors} handleClose={this.closeErrorMessage} type="danger" messages={this.state.errors} />
                 <form onSubmit={this.handleSubmit}>
 
-                    <h3 className="mt-5 mb-3">General</h3>
-                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.titleError} title="Page title * :" name="title" value={this.state.title} />
-                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.keynameError} title="Page keyname * :" name="keyname" value={this.state.keyname} />
-                    <SelectInput label="Template * :" placeholder="Page template" name="templateId" displayError={this.state.templateError} onChange={this.handleChange} options={this.state.templateOptions} selectedOption={this.state.templateId} />
+                    <h3 className="mt-5 mb-3">{t('page.general')}</h3>
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.titleError} title={`${t('page.title')} *`} name="title" value={this.state.title} />
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.keynameError} title={`${t('page.keyname')} *`} name="keyname" value={this.state.keyname} />
+                    <SelectInput label={`${t('page.template')} * :`} placeholder={t('page.defaultTemplate')} name="templateId" displayError={this.state.templateError} onChange={this.handleChange} options={this.state.templateOptions} selectedOption={this.state.templateId} />
                 
-                    <h3 className="mt-5 mb-3">SEO</h3>
-                    <SingleInput type="text" handleChange={this.handleChange} title="Meta keywords :" name="metaKeywords" value={this.state.metaKeywords} />
-                    <TextInput handleChange={this.handleChange} title="Meta description :" rows="3" name="metaDescription" value={this.state.metaDescription} />
-                    <SingleInput type="text" handleChange={this.handleChange} title="Meta robot :" name="metaRobot" value={this.state.metaRobot} />
+                    <h3 className="mt-5 mb-3">{t('page.SEO')}</h3>
+                    <SingleInput type="text" handleChange={this.handleChange} title={`${t('page.metaKeywords')}`} name="metaKeywords" value={this.state.metaKeywords} />
+                    <TextInput handleChange={this.handleChange} title={`${t('page.metaDescription')}`} rows="3" name="metaDescription" value={this.state.metaDescription} />
+                    <SingleInput type="text" handleChange={this.handleChange} title={`${t('page.metaRobot')}`} name="metaRobot" value={this.state.metaRobot} />
                 
-                    <button type="submit" className="btn btn-outline-info mt-5 float-right">Submit</button>
+                    <button type="submit" className="btn btn-outline-info mt-5 float-right">{t('page.submit')}</button>
                 </form>
             </div>
         );
     }
 }
+
+export default translate()(Page);

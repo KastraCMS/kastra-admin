@@ -4,8 +4,9 @@ import SingleInput from '../common/singleinput'
 import CheckboxInput from '../common/checkboxinput';
 import * as Kastra from '../../constants'
 import Loading from '../common/loading';
+import { translate } from 'react-i18next';
 
-export default class Role extends Component {
+class Role extends Component {
 
     constructor(props) {
         super(props);
@@ -32,8 +33,10 @@ export default class Role extends Component {
     }
 
     componentDidMount() {
+        const { t } = this.props;
         let data = {};
-        this.setState({ isLoading: true, loadingMessage: 'Loading permissions ...'});
+
+        this.setState({ isLoading: true, loadingMessage: t('role.loadingPermissions')});
 
         fetch(`${Kastra.API_URL}/api/permission/list`, 
                 {
@@ -66,8 +69,9 @@ export default class Role extends Component {
     }
 
     fetchRole(data) {
+        const { t } = this.props;
 
-        this.setState({ isLoading: true, loadingMessage: 'Loading roles ...' });
+        this.setState({ isLoading: true, loadingMessage: t('role.loadingRoles') });
 
         fetch(`${Kastra.API_URL}/api/role/get/${this.state.roleId}`, 
         {
@@ -136,14 +140,15 @@ export default class Role extends Component {
     }
 
     handleSubmit(event) {
-
+        
+        const { t } = this.props;
         const errorMessages = [];
         let newState = {};
 
         event.preventDefault();
         
         if (this.state.name.length === 0) {
-            errorMessages.push("Name cannot be empty");
+            errorMessages.push(t('role.emptyName'));
             newState.nameError = true;
         } else {
             newState.nameError = false;
@@ -205,27 +210,30 @@ export default class Role extends Component {
     }
 
     render() {
-        let roleTitle = (this.state.roleId !== undefined) ? 'Edit role' : 'New role';
+        const { t } = this.props;
+        let roleTitle = (this.state.roleId !== undefined) ? t('role.editRole') : t('role.newRole');
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
-                <h4 className="text-center">Edit the role</h4>
+                <h4 className="text-center">{t('role.subtitle')}</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">{roleTitle}</h2>
-                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message="Role updated with success" />
+                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message={t('role.updateSuccess')}/>
                 <Message display={this.state.displayErrors} handleClose={this.closeErrorMessage} type="danger" messages={this.state.errors} />
                 <form onSubmit={this.handleSubmit}>
 
-                    <h3 className="mt-5 mb-3">General</h3>
-                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.nameError} title="Name * :" name="name" value={this.state.name} />
+                    <h3 className="mt-5 mb-3">{t('role.general')}</h3>
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.nameError} title={`${t('role.name')} *`} name="name" value={this.state.name} />
 
-                    <h3 className="mt-5 mb-3">Permissions</h3>
+                    <h3 className="mt-5 mb-3">{t('role.permissions')}</h3>
                     {this.renderPermissions()}
 
-                    <button type="submit" className="btn btn-outline-info mt-5 float-right">Submit</button>
+                    <button type="submit" className="btn btn-outline-info mt-5 float-right">{t('role.submit')}</button>
                 </form>
             </div>
         );
     }
 }
+
+export default translate()(Role);

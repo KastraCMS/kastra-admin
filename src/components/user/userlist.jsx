@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import ConfirmDialog from '../common/confirmdialog';
 import * as Kastra from '../../constants';
 import Loading from '../common/loading';
+import { translate } from 'react-i18next';
 
-export default class UserList extends Component {
+class UserList extends Component {
 
     constructor(props) {
         super(props);
@@ -19,7 +20,9 @@ export default class UserList extends Component {
     }
 
     componentDidMount() {
-        this.setState({ isLoading: true, loadingMessage: 'Loading users ...' });
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('userlist.loading') });
 
         fetch(`${Kastra.API_URL}/api/user/list`, 
         {
@@ -41,7 +44,9 @@ export default class UserList extends Component {
     }
 
     handleDelete(id) {
-        this.setState({ isLoading: true, loadingMessage: 'Deleting user ...' });
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('userlist.deleting') });
 
         fetch(`${Kastra.API_URL}/api/user/delete`, 
         {
@@ -64,10 +69,12 @@ export default class UserList extends Component {
     }
 
     renderUsers() {
+        const { t } = this.props;
+
         if(this.state.users.length === 0) {
             return (
                 <tr>
-                    <td align="center" colSpan="5">No user found</td>
+                    <td align="center" colSpan="5">{t('userlist.noUserFound')}</td>
                 </tr>
             );
         }
@@ -84,11 +91,11 @@ export default class UserList extends Component {
                         <td>
                             <a href="" data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
                             <ConfirmDialog id={dialogId} 
-                                title="Delete user"
-                                message={`Are you sure you want to delete "${user.userName}" ?`}
+                                title={t('userlist.deleteTitle')}
+                                message={`${t('userlist.deleteMessage')} "${user.userName}" ?`}
                                 onConfirm={() => this.handleDelete(user.id)}
-                                confirmLabel="Delete"
-                                cancelLabel="Cancel" />
+                                confirmLabel={t('userlist.delete')}
+                                cancelLabel={t('userlist.cancel')} />
                         </td>
                     </tr>
                 );
@@ -97,25 +104,27 @@ export default class UserList extends Component {
     }
 
     render() {
+        const { t } = this.props;
+
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
-                <h4 className="text-center">All users of your website</h4>
+                <h4 className="text-center">{t('userlist.subtitle')}</h4>
                 <hr/>
-                <h2 className="mb-5 text-center">User list</h2>
-                <Link to={'/admin/users/edit'} className="btn btn-outline-info mb-5">New user</Link>
+                <h2 className="mb-5 text-center">{t('userlist.title')}</h2>
+                <Link to={'/admin/users/edit'} className="btn btn-outline-info mb-5">{t('userlist.newUser')}</Link>
                 <div className="float-right">
-                    <Link to={'/admin/users/roles'} className="btn btn-outline-info mb-5">Manage roles</Link>
-                    <Link to={'/admin/users/permissions'} className="btn btn-outline-info mb-5 ml-3">Manage permissions</Link>
+                    <Link to={'/admin/users/roles'} className="btn btn-outline-info mb-5">{t('userlist.manageRoles')}</Link>
+                    <Link to={'/admin/users/permissions'} className="btn btn-outline-info mb-5 ml-3">{t('userlist.managePermissions')}</Link>
                 </div>
                 <table className="table table-hover table-dark bg-dark">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Edit</th>
-                            <th scope="col">Delete</th>
+                            <th scope="col">{t('userlist.username')}</th>
+                            <th scope="col">{t('userlist.email')}</th>
+                            <th scope="col">{t('userlist.edit')}</th>
+                            <th scope="col">{t('userlist.delete')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,3 +135,5 @@ export default class UserList extends Component {
         );
     }
 }
+
+export default translate()(UserList);

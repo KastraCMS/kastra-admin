@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import { Line } from 'react-chartjs'
 import * as Kastra from '../../constants'
+import { translate } from 'react-i18next';
 
-export default class Home extends Component {
+class Home extends Component {
 
     constructor(props) {
         super(props);
@@ -109,52 +110,53 @@ export default class Home extends Component {
     }
 
     renderVisitsTable() {
-        
-            if(this.state.visits.length > 0) {
-                return (
-                    <table className="table table-hover table-dark bg-dark mt-5 rounded">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>User</th>
-                                <th>IP address</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            this.state.visits.map((visit, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>{visit.date}</td>
-                                        <td>{visit.username}</td>
-                                        <td>{visit.ipAddress}</td>
-                                    </tr>
-                                );
-                            })
-                        }
-                        </tbody>
-                    </table>
-                );
-            } else {
-                return (
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>User</th>
-                                <th>IP address</th>
-                                <th>User agent</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>No visit found ...</td></tr>
-                        </tbody>
-                    </table>
-                );
-            }
+        const { t } = this.props;
+        if(this.state.visits.length > 0) {
+            return (
+                <table className="table table-hover table-dark bg-dark mt-5 rounded">
+                    <thead>
+                        <tr>
+                            <th>{t('home.date')}</th>
+                            <th>{t('home.user')}</th>
+                            <th>{t('home.ipAddress')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        this.state.visits.map((visit, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{visit.date}</td>
+                                    <td>{visit.username}</td>
+                                    <td>{visit.ipAddress}</td>
+                                </tr>
+                            );
+                        })
+                    }
+                    </tbody>
+                </table>
+            );
+        } else {
+            return (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{t('home.date')}</th>
+                            <th>{t('home.user')}</th>
+                            <th>{t('home.ipAddress')}</th>
+                            <th>{t('home.userAgent')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>{t('home.visitNotFound')}</td></tr>
+                    </tbody>
+                </table>
+            );
+        }
     }
 
     renderRecentUsers() {
+        const { t } = this.props;
         if(this.state.recentUsers.length > 0) {
             return (
                 <table className="table table-hover table-dark bg-dark mt-5 rounded">
@@ -180,7 +182,7 @@ export default class Home extends Component {
             );
         } else {
             return (
-                <p>No user found</p>
+                <p>{t('home.userNotFound')}</p>
             );
         }
     }
@@ -190,6 +192,8 @@ export default class Home extends Component {
             return null;
         }
 
+        const { t } = this.props;
+        
         return (
             <div className="text-white mt-5 clearfix">
                     <div className="container">
@@ -197,7 +201,7 @@ export default class Home extends Component {
                             <div className="col">
                                 <div className="bg-dark mb-4 p-4">                                  
                                     <blockquote className="blockquote">
-                                        <p>Welcome to your web administration !</p>
+                                        <p>{t('home.welcomeTitle')}</p>
                                         <footer className="blockquote-footer text-right">
                                             <small>Kastra website (v{this.state.applicationVersion}) based on Kastra Core (v{this.state.coreVersion})</small>
                                         </footer>
@@ -210,7 +214,7 @@ export default class Home extends Component {
                                 <div className="bg-dark p-4">
                                     <h3>
                                         <i className={`icon ion-person-stalker`}></i> 
-                                        <small> Number of users</small>
+                                        <small> {t('home.userNumber')}</small>
                                     </h3>
                                     <h2 className="display-4">{this.state.stats.numberOfUsers}</h2>
                                 </div>
@@ -219,14 +223,14 @@ export default class Home extends Component {
                                 <div className="bg-dark p-4">
                                     <h3>
                                         <i className={`icon ion-clock`}></i> 
-                                        <small> Visits of day</small>
+                                        <small> {t('home.visitOfDay')}</small>
                                     </h3>
                                     <h2 className="display-4">{this.state.stats.visitsPerDay}</h2>
                                 </div>
                             </div>
                             <div className="col-4">
                                 <div className="bg-dark p-4">
-                                    <h3><i className="icon ion-clipboard"></i><small> Total visits</small></h3>
+                                    <h3><i className="icon ion-clipboard"></i><small> {t('home.totalVisits')}</small></h3>
                                     <h2 className="display-4">{this.state.stats.totalVisits}</h2>
                                 </div>
                             </div>
@@ -234,7 +238,7 @@ export default class Home extends Component {
                         <div className="row mb-4">
                             <div className="col-12">
                                 <div className="bg-dark p-4">
-                                    <h3>Visits by day</h3>
+                                    <h3>{t('home.visitByDay')}</h3>
                                     <Line id="visits-chart" data={this.state.data} options={{ maintainAspectRatio: false, pointDot: false, responsive: true }} />
                                 </div>
                             </div>
@@ -242,13 +246,13 @@ export default class Home extends Component {
                         <div className="row">
                             <div className="col-6">
                                 <div className="bg-dark mr-sm-1 p-4">
-                                    <h3>Recent users</h3>
+                                    <h3>{t('home.recentUsers')}</h3>
                                     {this.renderRecentUsers()}
                                 </div>
                             </div>
                             <div className="col-6">
                                 <div className="bg-dark p-4">
-                                    <h3>Visits</h3>
+                                    <h3>{t('home.visits')}</h3>
                                     {this.renderVisitsTable()}
                                 </div>
                             </div>
@@ -258,3 +262,5 @@ export default class Home extends Component {
         );
     }
 }
+
+export default translate()(Home);

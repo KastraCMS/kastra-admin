@@ -5,8 +5,9 @@ import CheckboxInput from '../common/checkboxinput';
 import * as Kastra from '../../constants'
 import Loading from '../common/loading';
 import isInteger from 'lodash/isInteger'
+import { translate } from 'react-i18next';
 
-export default class Settings extends Component {
+class Settings extends Component {
 
     constructor (props) {
         super(props);
@@ -51,7 +52,9 @@ export default class Settings extends Component {
     }
 
     fetchSiteConfiguration(data) {
-        this.setState({ isLoading: true, loadingMessage: 'Loading settings ...' });
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('settings.loading') });
         fetch(`${Kastra.API_URL}/api/siteconfiguration/get`, 
                 {
                     method: 'GET',
@@ -82,13 +85,15 @@ export default class Settings extends Component {
     }
 
     fetchRestartApplication() {
+        const { t } = this.props;
+
         fetch(`${Kastra.API_URL}/api/siteconfiguration/restart`, 
         {
             method: 'GET',
             credentials: 'include'
         })
         .then((response) => {
-                this.setState({ isLoading: true, message: 'Starting application ...' });
+                this.setState({ isLoading: true, message: t('settings.startingApplication') });
                 if(response.ok) {
                     fetch(`${Kastra.API_URL}/api/siteconfiguration/get`, 
                     {
@@ -98,19 +103,20 @@ export default class Settings extends Component {
                     .then((response) => {
                             this.setState({ isLoading: false });
                             if(!response.ok) {
-                                alert('Failed to start the application');
+                                alert(t('settings.startFailed'));
                             }
                         }
                     );
                 } else {
-                    alert('Failed to stop the application');
+                    alert(t('settings.stopFailed'));
                 }
             }
         )
     }
 
     handleSubmit(event) {
-        
+
+        const { t } = this.props;
         let errorMessages = [];
         let newState = {};
 
@@ -119,7 +125,7 @@ export default class Settings extends Component {
         if (isInteger(Number(this.state.smtpPort))) {
             newState.smtpPortError = false;
         } else {
-            errorMessages.push("Smtp port must be an integer");
+            errorMessages.push(t('settings.smtpPortMustInteger'));
             newState.smtpPortError = true;
         }
 
@@ -142,7 +148,7 @@ export default class Settings extends Component {
             data.emailSender = this.state.emailSender;
             data.requireConfirmedEmail = this.state.requireConfirmedEmail;
             
-            this.setState({isLoading: true, loadingMessage: 'Save settings ...'});
+            this.setState({isLoading: true, loadingMessage: t('settings.saving')});
 
             fetch(`${Kastra.API_URL}/api/siteconfiguration/update`, 
             {
@@ -177,31 +183,35 @@ export default class Settings extends Component {
     }
 
     render() {
+        const { t } = this.props;
+
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
-                <h4 className="text-center">Configure your website</h4>
+                <h4 className="text-center">{t('settings.subtitle')}</h4>
                 <hr/>
-                <h2 className="mb-5 text-center">Site settings</h2>                
-                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message="Settings updated with success" />
+                <h2 className="mb-5 text-center">{t('settings.title')}</h2>                
+                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message={t('settings.succesMessage')} />
                 <Message display={this.state.displayErrors} handleClose={this.closeErrorMessage} type="danger" messages={this.state.errors} />
                 <form onSubmit={this.handleSubmit}>
-                    <SingleInput type="text" handleChange={this.handleChange} title="Site title :" name="title" value={this.state.title} />
-                    <SingleInput type="text" handleChange={this.handleChange} title="Site description :" name="description" value={this.state.description} />
-                    <SingleInput type="text" handleChange={this.handleChange} title="Site url :" name="hostUrl" value={this.state.hostUrl} />
-                    <CheckboxInput name="cacheActivated" handleChange={this.handleChange} checked={this.state.cacheActivated} title="Cache enabled" />
-                    <h3 className="mt-5 mb-4">Email settings</h3>
-                    <SingleInput type="text" handleChange={this.handleChange} title="Smtp host :" name="smtpHost" value={this.state.smtpHost} />
-                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.smtpPortError} title="Smtp port :" name="smtpPort" value={this.state.smtpPort} />
-                    <SingleInput type="text" handleChange={this.handleChange} title="Smtp user :" name="smtpCredentialsUser" value={this.state.smtpCredentialsUser} />
-                    <SingleInput type="password" handleChange={this.handleChange} title="Smtp password :" name="smtpCredentialsPassword" value={this.state.smtpCredentialsPassword} />
-                    <CheckboxInput name="smtpEnableSsl" handleChange={this.handleChange} checked={this.state.smtpEnableSsl} title="Enable Smtp SSL" />
-                    <SingleInput type="text" handleChange={this.handleChange} title="Sender email:" name="emailSender" value={this.state.emailSender} />
-                    <h3 className="mt-5 mb-4">Sign In</h3>
-                    <CheckboxInput className="mt-5 mb-3" name="requireConfirmedEmail" handleChange={this.handleChange} checked={this.state.requireConfirmedEmail} title="Require confirmed email" />
-                    <button type="submit" className="btn btn-outline-info mt-5 float-right">Submit</button>
+                    <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.siteTitle')}`} name="title" value={this.state.title} />
+                    <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.description')}`} name="description" value={this.state.description} />
+                    <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.hostUrl')}`} name="hostUrl" value={this.state.hostUrl} />
+                    <CheckboxInput name="cacheActivated" handleChange={this.handleChange} checked={this.state.cacheActivated} title={t('settings.cache')} />
+                    <h3 className="mt-5 mb-4">{t('settings.emailSettings')}</h3>
+                    <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.smtpHost')}`} name="smtpHost" value={this.state.smtpHost} />
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.smtpPortError} title={`${t('settings.smtpPort')}`} name="smtpPort" value={this.state.smtpPort} />
+                    <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.smtpUser')}`} name="smtpCredentialsUser" value={this.state.smtpCredentialsUser} />
+                    <SingleInput type="password" handleChange={this.handleChange} title={`${t('settings.smtpPassword')}`} name="smtpCredentialsPassword" value={this.state.smtpCredentialsPassword} />
+                    <CheckboxInput name="smtpEnableSsl" handleChange={this.handleChange} checked={this.state.smtpEnableSsl} title={t('settings.smtpSsl')} />
+                    <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.emailSender')}`} name="emailSender" value={this.state.emailSender} />
+                    <h3 className="mt-5 mb-4">{t('settings.signIn')}</h3>
+                    <CheckboxInput className="mt-5 mb-3" name="requireConfirmedEmail" handleChange={this.handleChange} checked={this.state.requireConfirmedEmail} title={t('settings.confirmedEmail')} />
+                    <button type="submit" className="btn btn-outline-info mt-5 float-right">{t('settings.submit')}</button>
                 </form>
             </div>
         );
     }
 }
+
+export default translate()(Settings);

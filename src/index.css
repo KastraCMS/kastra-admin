@@ -67,7 +67,7 @@ i, span {
 
 #sidebar.active {
     min-width: 80px;
-    max-width: 80px;
+    max-width: 140px;
     text-align: center;
 }
 
@@ -414,12 +414,13 @@ ul.CTAs a {
     background-repeat: no-repeat;
     background-position: left top;
     z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #loader-component .loader-content {
     position: fixed;
-    top: 50%;
-    left: 50%;
 }
 
 #loader-component .message {

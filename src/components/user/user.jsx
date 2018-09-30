@@ -4,8 +4,9 @@ import SingleInput from '../common/singleinput'
 import CheckboxInput from '../common/checkboxinput';
 import * as Kastra from '../../constants'
 import Loading from '../common/loading';
+import { translate } from 'react-i18next';
 
-export default class User extends Component {
+class User extends Component {
 
     constructor(props) {
         super(props);
@@ -34,10 +35,12 @@ export default class User extends Component {
     }
 
     componentDidMount() {
-        this.setState({ isLoading: true, loadingMessage: 'Loading roles ...' });
+        const { t } = this.props;
         let data = {};
 
-        fetch(`${Kastra.API_URL}/api/role/list`, 
+        this.setState({ isLoading: true, loadingMessage: t('user.loadingRoles') });
+
+        fetch(`${Kastra.API_URL}/api/role/list`,
                 {
                     method: 'GET',
                     credentials: 'include'
@@ -68,7 +71,9 @@ export default class User extends Component {
     }
 
     fetchUser(data) {
-        this.setState({ isLoading: true, loadingMessage: 'Loading user ...' });
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('user.loading') });
 
         if(this.state.userId === undefined) {
             data.isLoading = false;
@@ -145,20 +150,21 @@ export default class User extends Component {
 
     handleSubmit(event) {
 
+        const { t } = this.props;
         const errorMessages = [];
         let newState = {};
 
         event.preventDefault();
 
         if (this.state.email.length === 0) {
-            errorMessages.push("Email address can't be empty");
+            errorMessages.push(t('user.emptyEmail'));
             newState.emailError = true;
         } else {
             newState.emailError = false;
         }
 
         if(this.state.userId === undefined && this.state.password !== this.state.confirmPassword) {
-            errorMessages.push("Password fields must be identic");
+            errorMessages.push(t('user.samePassword'));
             newState.passwordError = true;
         } else {
             newState.passwordError = false;
@@ -228,41 +234,46 @@ export default class User extends Component {
     }
 
     renderPassword() {
+        const { t } = this.props;
+
         if(this.state.userId !== undefined) {
             return (null);
         }
 
         return (
             <div>
-                <SingleInput type="password" handleChange={this.handleChange} displayError={this.state.passwordError} title="Password * :" name="password" value={this.state.password} />
-                <SingleInput type="password" handleChange={this.handleChange} displayError={this.state.passwordError} title="Confirm password * :" name="confirmPassword" value={this.state.confirmPassword} />          
+                <SingleInput type="password" handleChange={this.handleChange} displayError={this.state.passwordError} title={`${t('user.password')} *`} name="password" value={this.state.password} />
+                <SingleInput type="password" handleChange={this.handleChange} displayError={this.state.passwordError} title={`${t('user.confirmPassword')} *`} name="confirmPassword" value={this.state.confirmPassword} />          
             </div>
         );
     }
 
     render() {
-        let userTitle = (this.state.userId !== undefined) ? 'Edit user' : 'New user';
+        const { t } = this.props;
+        let userTitle = (this.state.userId !== undefined) ? t('user.editUser') : t('user.newUser');
 
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
-                <h4 className="text-center">Edit the user</h4>
+                <h4 className="text-center">{t('user.subtitle')}</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">{userTitle}</h2>
-                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message="User updated with success" />
+                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message={t('user.updateSuccess')} />
                 <Message display={this.state.displayErrors} handleClose={this.closeErrorMessage} type="danger" messages={this.state.errors} />
                 <form onSubmit={this.handleSubmit}>
 
-                    <h3 className="mt-5 mb-3">General</h3>
-                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.emailError} title="Email address * :" name="email" value={this.state.email} />
+                    <h3 className="mt-5 mb-3">{t('user.general')}</h3>
+                    <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.emailError} title={`${t('user.emailAddress')} *`} name="email" value={this.state.email} />
                     {this.renderPassword()}
 
-                    <h3 className="mt-5 mb-3">Roles</h3>
+                    <h3 className="mt-5 mb-3">{t('user.roles')}</h3>
                     {this.renderRoles()}
 
-                    <button type="submit" className="btn btn-outline-info mt-5 float-right">Submit</button>
+                    <button type="submit" className="btn btn-outline-info mt-5 float-right">{t('user.submit')}</button>
                 </form>
             </div>
         );
     }
 }
+
+export default translate()(User);

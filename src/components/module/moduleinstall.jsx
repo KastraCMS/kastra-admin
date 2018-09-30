@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import ConfirmDialog from '../common/confirmdialog';
 import * as Kastra from '../../constants'
 import Loading from '../common/loading';
+import { translate } from 'react-i18next';
 
-export default class ModuleInstall extends Component {
+class ModuleInstall extends Component {
 
     constructor(props) {
         super(props);
@@ -16,7 +17,8 @@ export default class ModuleInstall extends Component {
     }
 
     componentDidMount() {
-        this.setState({ isLoading: true, loadingMessage: 'Loading modules ...' });
+        const { t } = this.props;
+        this.setState({ isLoading: true, loadingMessage: t('moduleinstall.loadingModules') });
 
         fetch(`${Kastra.API_URL}/api/moduledefinition/modulefound`, 
                 {
@@ -38,9 +40,10 @@ export default class ModuleInstall extends Component {
     }
 
     handleInstall(event, assemblyName) {
+        const { t } = this.props;
         event.preventDefault();
 
-        this.setState({ isLoading: true, loadingMessage: 'Installing module ...' });
+        this.setState({ isLoading: true, loadingMessage: t('moduleinstall.installingModule') });
 
         fetch(`${Kastra.API_URL}/api/moduledefinition/install`, 
         {
@@ -63,9 +66,10 @@ export default class ModuleInstall extends Component {
     }
 
     handleUninstall(event, assemblyName, moduleDefinitionId) {
+        const { t } = this.props;
         event.preventDefault();
 
-        this.setState({ isLoading: true, loadingMessage: 'Uninstalling module ...' });
+        this.setState({ isLoading: true, loadingMessage: t('moduleinstall.uninstallingModule') });
 
         const data = { name: assemblyName, id: moduleDefinitionId };
         fetch(`${Kastra.API_URL}/api/moduledefinition/uninstall`, 
@@ -89,11 +93,12 @@ export default class ModuleInstall extends Component {
     }
 
     renderModules() {
+        const { t } = this.props;
 
         if(this.state.modules.length === 0) {
             return (
                 <tr>
-                    <td align="center" colSpan="4">No module found</td>
+                    <td align="center" colSpan="4">{t('moduleinstall.noModuleFound')}</td>
                 </tr>
             );
         }
@@ -111,11 +116,11 @@ export default class ModuleInstall extends Component {
                             <td>
                                 <a href="" data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
                                 <ConfirmDialog id={dialogId} 
-                                    title="Uninstall module"
-                                    message={`Are you sure you want to uninstall "${module.name}" ?`}
+                                    title={t('moduleinstall.uninstallModule')}
+                                    message={`${t('moduleinstall.uninstallAsk')} "${module.name}" ?`}
                                     onConfirm={(e) => this.handleUninstall(e, module.assemblyName, module.moduleDefinitionId)}
-                                    confirmLabel="Uninstall"
-                                    cancelLabel="Cancel" />
+                                    confirmLabel={t('moduleinstall.uninstall')}
+                                    cancelLabel={t('moduleinstall.cancel')} />
                             </td>
                         </tr>
                     );
@@ -136,19 +141,20 @@ export default class ModuleInstall extends Component {
     }
 
     render() {
+        const { t } = this.props;
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
-                <h4 className="text-center">All your website module definition</h4>
+                <h4 className="text-center">{t('moduleinstall.subtitle')}</h4>
                 <hr/>
-                <h2 className="mb-5 text-center">Module definition list</h2>
+                <h2 className="mb-5 text-center">{t('moduleinstall.title')}</h2>
                 <table className="table table-dark bg-dark">
                     <thead>
                         <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Version</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">{t('moduleinstall.name')}</th>
+                            <th scope="col">{t('moduleinstall.status')}</th>
+                            <th scope="col">{t('moduleinstall.version')}</th>
+                            <th scope="col">{t('moduleinstall.action')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -159,3 +165,5 @@ export default class ModuleInstall extends Component {
         );
     }
 }
+
+export default translate()(ModuleInstall);

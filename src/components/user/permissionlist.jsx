@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import ConfirmDialog from '../common/confirmdialog';
 import Loading from '../common/loading'
 import * as Kastra from '../../constants';
+import { translate } from 'react-i18next';
 
-export default class PermissionList extends Component {
+class PermissionList extends Component {
 
     constructor(props) {
         super(props);
@@ -20,7 +21,10 @@ export default class PermissionList extends Component {
     }
 
     componentDidMount() {
-        this.setState({ isLoading: true, loadingMessage: 'Loading permissions ...'});
+        const { t } = this.props;
+
+        this.setState({ isLoading: true, loadingMessage: t('permissionlist.loading')});
+
         fetch(`${Kastra.API_URL}/api/permission/list`, 
         {
             method: 'GET',
@@ -41,12 +45,12 @@ export default class PermissionList extends Component {
     }
 
     handleCreate(event) {
-
-        event.preventDefault();
-
+        const { t } = this.props;
         const data = this.state.name;
 
-        this.setState({ isLoading: true, loadingMessage: 'Adding permission ...' });
+        event.preventDefault();
+       
+        this.setState({ isLoading: true, loadingMessage: t('permissionlist.adding') });
 
         fetch(`${Kastra.API_URL}/api/permission/add`, 
             {
@@ -80,8 +84,9 @@ export default class PermissionList extends Component {
     }
 
     handleDelete(id) {
+        const { t } = this.props;
 
-        this.setState({ isLoading: true, loadingMessage: 'Deleting permission ...' });
+        this.setState({ isLoading: true, loadingMessage: t('permissionlist.deleting') });
         
         fetch(`${Kastra.API_URL}/api/permission/delete`, 
             {
@@ -104,10 +109,12 @@ export default class PermissionList extends Component {
     }
 
     renderPermissions() {
+        const { t } = this.props;
+
         if(this.state.permissions.length === 0) {
             return (
                 <tr>
-                    <td align="center" colSpan="5">No permission found</td>
+                    <td align="center" colSpan="5">{t('permissionlist.noPermissionFound')}</td>
                 </tr>
             );
         }
@@ -122,11 +129,11 @@ export default class PermissionList extends Component {
                         <td>
                             <a href="" onClick={(e) => e.preventDefault()} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
                             <ConfirmDialog id={dialogId} 
-                                title="Delete permission"
-                                message={`Are you sure you want to delete "${permission.name}" ?`}
+                                title={t('permissionlist.deleteTitle')}
+                                message={`${t('permissionlist.deleteMessage')} "${permission.name}" ?`}
                                 onConfirm={() => this.handleDelete(permission.id)}
-                                confirmLabel="Delete"
-                                cancelLabel="Cancel" />
+                                confirmLabel={t('permissionlist.delete')}
+                                cancelLabel={t('permissionlist.cancel')} />
                         </td>
                         
                     </tr>
@@ -136,17 +143,19 @@ export default class PermissionList extends Component {
     }
 
     render() {
+        const { t } = this.props;
+
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
-                <h4 className="text-center">All permissions of your website</h4>
+                <h4 className="text-center">{t('permissionlist.subtitle')}</h4>
                 <hr/>
-                <h2 className="mb-5 text-center">Permission list</h2>
+                <h2 className="mb-5 text-center">{t('permissionlist.title')}</h2>
                               
                 <div className="container mb-4">
                     <div className="row">
                         <input id="name" className="form-control col-sm-3 mr-2" onChange={this.handleChange} name="name" type="text" />
-                        <a href="" className="btn btn-outline-info col-sm-1" onClick={this.handleCreate}>Add</a>
+                        <a href="" className="btn btn-outline-info col-sm-1" onClick={this.handleCreate}>{t('permissionlist.add')}</a>
                     </div>
                 </div>
 
@@ -154,8 +163,8 @@ export default class PermissionList extends Component {
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Delete</th>
+                            <th scope="col">{t('permissionlist.name')}</th>
+                            <th scope="col">{t('permissionlist.delete')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -166,3 +175,5 @@ export default class PermissionList extends Component {
         );
     }
 }
+
+export default translate()(PermissionList);
