@@ -135,7 +135,8 @@
         "emailSender": "Email de l'expéditeur",
         "signIn": "Connexion",
         "confirmedEmail": "Requiert un email vérifié",
-        "submit": "Sauvegarder"
+        "submit": "Sauvegarder",
+        "theme": "Thème"
     },
     "permissionlist": {
         "loading": "Chargement des permissions ...",

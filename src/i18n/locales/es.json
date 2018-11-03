@@ -135,7 +135,8 @@
         "emailSender": "Sender email",
         "signIn": "Sign In",
         "confirmedEmail": "Require confirmed email",
-        "submit": "Submit"
+        "submit": "Submit",
+        "theme": "Tema"
     },
     "permissionlist": {
         "loading": "Loading permissions ...",

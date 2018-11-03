@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Message from '../common/message'
 import SingleInput from '../common/singleinput'
 import CheckboxInput from '../common/checkboxinput';
+import SelectInput from '../common/selectinput'
 import * as Kastra from '../../constants'
 import Loading from '../common/loading';
 import isInteger from 'lodash/isInteger'
@@ -27,7 +28,9 @@ class Settings extends Component {
             displaySuccess: false,
             isLoading: false,
             loadingMessage: '',
-            errors: []
+            errors: [],
+            theme: '',
+            themeList: []
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -75,6 +78,17 @@ class Settings extends Component {
                     data.smtpEnableSsl = result.smtpEnableSsl || false;
                     data.emailSender = result.emailSender || '';
                     data.requireConfirmedEmail = result.requireConfirmedEmail || false;
+                    data.theme = result.theme || '';
+                    
+                    data.themeList = [];
+                    if(result.themeList !== undefined && result.themeList !== null) {
+                        result.themeList.forEach(function (element) {
+                            data.themeList.push({
+                                name: element,
+                                value: element
+                            });
+                        });
+                    }
                     
                     this.setState(data);
                 }
@@ -147,6 +161,7 @@ class Settings extends Component {
             data.smtpEnableSsl = this.state.smtpEnableSsl;
             data.emailSender = this.state.emailSender;
             data.requireConfirmedEmail = this.state.requireConfirmedEmail;
+            data.theme = this.state.theme;
             
             this.setState({isLoading: true, loadingMessage: t('settings.saving')});
 
@@ -197,6 +212,7 @@ class Settings extends Component {
                     <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.siteTitle')}`} name="title" value={this.state.title} />
                     <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.description')}`} name="description" value={this.state.description} />
                     <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.hostUrl')}`} name="hostUrl" value={this.state.hostUrl} />
+                    <SelectInput label={t('settings.theme')} name="theme" onChange={this.handleChange} options={this.state.themeList} selectedOption={this.state.theme} />
                     <CheckboxInput name="cacheActivated" handleChange={this.handleChange} checked={this.state.cacheActivated} title={t('settings.cache')} />
                     <h3 className="mt-5 mb-4">{t('settings.emailSettings')}</h3>
                     <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.smtpHost')}`} name="smtpHost" value={this.state.smtpHost} />
