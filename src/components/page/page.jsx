@@ -6,7 +6,7 @@ import TextInput from '../common/textinput'
 import * as Kastra from '../../constants'
 import Loading from '../common/loading';
 import { translate } from 'react-i18next';
-import { getXSRFToken } from '../../Utils';
+import { getXSRFToken } from '../../utils';
 
 class Page extends Component {
 

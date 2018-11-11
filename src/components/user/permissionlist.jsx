@@ -3,7 +3,7 @@ import ConfirmDialog from '../common/confirmdialog';
 import Loading from '../common/loading'
 import * as Kastra from '../../constants';
 import { translate } from 'react-i18next';
-import { getXSRFToken } from '../../Utils';
+import { getXSRFToken } from '../../utils';
 
 class PermissionList extends Component {
 

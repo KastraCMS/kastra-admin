@@ -7,7 +7,7 @@ import * as Kastra from '../../constants'
 import Loading from '../common/loading';
 import isInteger from 'lodash/isInteger'
 import { translate } from 'react-i18next';
-import { getXSRFToken } from '../../Utils';
+import { getXSRFToken } from '../../utils';
 
 class Settings extends Component {
 
