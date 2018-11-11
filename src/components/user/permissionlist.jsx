@@ -3,6 +3,7 @@ import ConfirmDialog from '../common/confirmdialog';
 import Loading from '../common/loading'
 import * as Kastra from '../../constants';
 import { translate } from 'react-i18next';
+import { getXSRFToken } from '../../Utils';
 
 class PermissionList extends Component {
 
@@ -58,7 +59,8 @@ class PermissionList extends Component {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken' : getXSRFToken()
                 },
                 body: JSON.stringify(data)
             })
@@ -94,7 +96,8 @@ class PermissionList extends Component {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken' : getXSRFToken()
                 },
                 body: JSON.stringify(id)
             })

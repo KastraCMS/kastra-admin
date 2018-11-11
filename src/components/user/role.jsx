@@ -5,6 +5,7 @@ import CheckboxInput from '../common/checkboxinput';
 import * as Kastra from '../../constants'
 import Loading from '../common/loading';
 import { translate } from 'react-i18next';
+import { getXSRFToken } from '../../Utils';
 
 class Role extends Component {
 
@@ -174,7 +175,8 @@ class Role extends Component {
             credentials: 'include',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'RequestVerificationToken' : getXSRFToken()
             },
             body: JSON.stringify(data)
         })

@@ -7,6 +7,7 @@ import * as Kastra from '../../constants'
 import Loading from '../common/loading';
 import isInteger from 'lodash/isInteger'
 import { translate } from 'react-i18next';
+import { getXSRFToken } from '../../Utils';
 
 class Settings extends Component {
 
@@ -171,7 +172,8 @@ class Settings extends Component {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken' : getXSRFToken()
                 },
                 body: JSON.stringify(data)
             })
