@@ -42,7 +42,8 @@
         "loadingPermissions": "Loading permissions ...",
         "loadingPlaces": "Loading places ...",
         "loading": "Loading module ...",
-        "loadingModuleDefinitions": "Loading module definitions ..."
+        "loadingModuleDefinitions": "Loading module definitions ...",
+        "isStatic": "Static module"
     },
     "modulelist": {
         "noModuleFound": "No module found",

@@ -30,7 +30,8 @@ class Module extends Component {
             permissionOptions: [],
             permissions: [],
             isLoading: false,
-            loadingMessage: ''
+            loadingMessage: '',
+            isStatic: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -91,6 +92,7 @@ class Module extends Component {
                     data.placeId = result.placeId;
                     data.permissions = result.permissions;
                     data.isLoading = false;
+                    data.isStatic = result.isStatic;
 
                     if(data.permissionOptions.length > 0) {
                         data.permissionOptions = this.setCheckBoxValues(data.permissionOptions, data.permissions);
@@ -258,6 +260,7 @@ class Module extends Component {
             data.pageId = this.state.pageId;
             data.placeId = this.state.placeId;
             data.permissions = this.state.permissions;
+            data.isStatic = this.state.isStatic;
 
             fetch(`${Kastra.API_URL}/api/module/update`, 
             {
@@ -318,6 +321,7 @@ class Module extends Component {
                     <SingleInput type="text" handleChange={this.handleChange} displayError={this.state.nameError} title={`${t('module.name')} *`} name="name" value={this.state.name} />
                     <SelectInput label={`${t('module.moduleDefinition')} *`} placeholder={t('module.selectDefinition')} name="definitionId" displayError={this.state.definitionError} onChange={this.handleChange} options={this.state.definitionOptions} selectedOption={this.state.definitionId} />
                     <SelectInput label={`${t('module.placeholder')} *`} placeholder={t('module.selectPlaceholder')} name="placeId" displayError={this.state.placeError} onChange={this.handleChange} options={this.state.placeOptions} selectedOption={this.state.placeId} />
+                    <CheckboxInput name="isStatic" value={this.state.isStatic} handleChange={this.handleChange} checked={this.state.isStatic} title={t('module.isStatic')} />
 
                     <h3 className="mt-5 mb-3">{t('module.permissions')}</h3>
                     {this.renderPermissions()}
