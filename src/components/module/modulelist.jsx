@@ -31,8 +31,14 @@ class ModuleList extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    let modules = result;
+
+                    if(this.state.pageId > 0) {
+                        modules = result.filter(module => (module.pageId) === parseInt(this.state.pageId, 10));
+                    }
+                    
                     this.setState({
-                        modules: result,
+                        modules: modules,
                         isLoading: false
                     });
                 }
@@ -84,6 +90,7 @@ class ModuleList extends Component {
         return (
             this.state.modules.map((module, index) => {
                 const dialogId = `dialog-${index}`;
+
                 return (
                     <tr key={index}>
                         <td>{module.id}</td>
