@@ -43,7 +43,8 @@
         "loadingPlaces": "Loading places ...",
         "loading": "Loading module ...",
         "loadingModuleDefinitions": "Loading module definitions ...",
-        "isStatic": "Static module"
+        "isStatic": "Static module",
+        "isDisabled": "Disable module"
     },
     "modulelist": {
         "noModuleFound": "No module found",

@@ -32,7 +32,8 @@ class Module extends Component {
             permissions: [],
             isLoading: false,
             loadingMessage: '',
-            isStatic: false
+            isStatic: false,
+            isDisabled: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -94,6 +95,7 @@ class Module extends Component {
                     data.permissions = result.permissions;
                     data.isLoading = false;
                     data.isStatic = result.isStatic;
+                    data.isDisabled = result.isDisabled;
 
                     if(data.permissionOptions.length > 0) {
                         data.permissionOptions = this.setCheckBoxValues(data.permissionOptions, data.permissions);
@@ -262,6 +264,7 @@ class Module extends Component {
             data.placeId = this.state.placeId;
             data.permissions = this.state.permissions;
             data.isStatic = this.state.isStatic;
+            data.isDisabled = this.state.isDisabled;
 
             fetch(`${Kastra.API_URL}/api/module/update`, 
             {
@@ -324,6 +327,7 @@ class Module extends Component {
                     <SelectInput label={`${t('module.moduleDefinition')} *`} placeholder={t('module.selectDefinition')} name="definitionId" displayError={this.state.definitionError} onChange={this.handleChange} options={this.state.definitionOptions} selectedOption={this.state.definitionId} />
                     <SelectInput label={`${t('module.placeholder')} *`} placeholder={t('module.selectPlaceholder')} name="placeId" displayError={this.state.placeError} onChange={this.handleChange} options={this.state.placeOptions} selectedOption={this.state.placeId} />
                     <CheckboxInput name="isStatic" value={this.state.isStatic} handleChange={this.handleChange} checked={this.state.isStatic} title={t('module.isStatic')} />
+                    <CheckboxInput name="isDisabled" value={this.state.isDisabled} handleChange={this.handleChange} checked={this.state.isDisabled} title={t('module.isDisabled')} />
 
                     <h3 className="mt-5 mb-3">{t('module.permissions')}</h3>
                     {this.renderPermissions()}

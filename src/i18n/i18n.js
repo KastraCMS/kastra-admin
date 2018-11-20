@@ -11,7 +11,7 @@ i18next
       // React already does escaping
       escapeValue: false,
     },
-    lng: 'fr', // 'en' | 'es'
+    //lng: 'fr', // 'en' | 'es'
     // Using simple hardcoded resources for simple example
     resources: {
       'en': {

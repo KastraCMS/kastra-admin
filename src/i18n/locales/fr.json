@@ -43,7 +43,8 @@
         "loadingPlaces": "Chargement des places ...",
         "loading": "Chargement du module ...",
         "loadingModuleDefinitions": "Chargement des définitions de module ...",
-        "isStatic": "Module statique"
+        "isStatic": "Module statique",
+        "isDisabled": "Désactiver le module"
     },
     "modulelist": {
         "noModuleFound": "Aucun module trouvé",
