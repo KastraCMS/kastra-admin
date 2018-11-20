@@ -15,7 +15,7 @@ class App extends React.Component {
           <nav id="sidebar" className="bg-dark active">
               <div className="sidebar-header">
                   <h3>Kastra</h3>
-                  <img id="logo" alt="Kastra" src="/img/logo.svg" />
+                  <img id="logo" alt="Kastra" src="/images/logo.svg" />
               </div>
               <div id="navigation-side">
                 <NavigationSide />
