@@ -1,22 +1,52 @@
 import React, {Component} from 'react';
 import * as Kastra from '../../constants'
 import Loading from '../common/loading';
+import { translate } from 'react-i18next';
+import { isNil } from 'lodash'
 
-export default class NavigationHeader extends Component {
+class NavigationHeader extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
             isLoading: false,
-            message: ''
+            message: '',
+            retry: 0
         };
     }
 
-    handleRestart(event) {
-        event.preventDefault();
+    fetchStartApplication() {
+        const { t } = this.props;
 
-        this.setState({ isLoading: true, message: 'Stopping application ...' });
+        fetch(`${Kastra.API_URL}/api/siteconfiguration/get`, 
+        {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then((response) => {
+            if(!response.ok) {
+                if(this.state.retry < 15) {
+                    this.setState({ retry: this.state.retry+1 });
+                    setTimeout(() => this.fetchStartApplication(), 1000);
+                } else {
+                    this.setState({ isLoading: false });
+                    alert(t('settings.startFailed'));
+                }
+            } else {
+                this.setState({ isLoading: false });
+            }
+        });
+    }
+
+    handleRestart(event) {
+        const { t } = this.props;
+        
+        if(!isNil(event)) {
+            event.preventDefault();
+        }
+
+        this.setState({ isLoading: true, message: t('settings.stoppingApplication') });
 
         fetch(`${Kastra.API_URL}/api/siteconfiguration/restart`, 
         {
@@ -24,25 +54,19 @@ export default class NavigationHeader extends Component {
             credentials: 'include'
         })
         .then((response) => {
-                this.setState({ isLoading: true, message: 'Starting application ...' });
-                if(response.ok) {
-                    fetch(`${Kastra.API_URL}/api/siteconfiguration/get`, 
-                    {
-                        method: 'GET',
-                        credentials: 'include'
-                    })
-                    .then((response) => {
-                            this.setState({ isLoading: false });
-                            if(!response.ok) {
-                                alert('Failed to start the application');
-                            }
-                        }
-                    );
+            if(response.ok) {
+                this.setState({ isLoading: true, message: t('settings.startingApplication'), retry: 0 });
+                this.fetchStartApplication();
+            } else {
+                if(this.state.retry < 15) {
+                    this.setState({ retry: this.state.retry+1 });
+                    setTimeout(() => this.handleRestart(), 1000);
                 } else {
-                    alert('Failed to stop the application');
+                    this.setState({ isLoading: false });
+                    alert(t('settings.stopFailed'));
                 }
             }
-        )
+        });
     }
 
     render() {
@@ -59,3 +83,5 @@ export default class NavigationHeader extends Component {
         );
     }
 }
+
+export default translate()(NavigationHeader);

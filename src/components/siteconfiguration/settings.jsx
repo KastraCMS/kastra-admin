@@ -31,7 +31,8 @@ class Settings extends Component {
             loadingMessage: '',
             errors: [],
             theme: '',
-            themeList: []
+            themeList: [],
+            retry: 0
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -99,8 +100,33 @@ class Settings extends Component {
             });
     }
 
+    fetchStartApplication() {
+        const { t } = this.props;
+        
+        fetch(`${Kastra.API_URL}/api/siteconfiguration/get`, 
+        {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then((response) => {
+                if(!response.ok) {  
+                    if(this.state.retry < 15) {
+                        this.setState({ retry: this.state.retry+1 });
+                        setTimeout(() => this.fetchStartApplication(), 1000);
+                    } else {
+                        this.setState({ isLoading: false });
+                        alert(t('settings.startFailed'));
+                    }
+                } else {
+                    this.setState({ isLoading: false });
+                }
+            }
+        );
+    }
+
     fetchRestartApplication() {
         const { t } = this.props;
+        this.setState({ isLoading: true, message: t('settings.stoppingApplication') });
 
         fetch(`${Kastra.API_URL}/api/siteconfiguration/restart`, 
         {
@@ -108,20 +134,9 @@ class Settings extends Component {
             credentials: 'include'
         })
         .then((response) => {
-                this.setState({ isLoading: true, message: t('settings.startingApplication') });
+                this.setState({ isLoading: true, loadingMessage: t('settings.startingApplication') });
                 if(response.ok) {
-                    fetch(`${Kastra.API_URL}/api/siteconfiguration/get`, 
-                    {
-                        method: 'GET',
-                        credentials: 'include'
-                    })
-                    .then((response) => {
-                            this.setState({ isLoading: false });
-                            if(!response.ok) {
-                                alert(t('settings.startFailed'));
-                            }
-                        }
-                    );
+                    this.setState({ retry: 0 }, this.fetchStartApplication());
                 } else {
                     alert(t('settings.stopFailed'));
                 }
@@ -208,7 +223,7 @@ class Settings extends Component {
                 <h4 className="text-center">{t('settings.subtitle')}</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">{t('settings.title')}</h2>                
-                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message={t('settings.succesMessage')} />
+                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message={t('settings.successMessage')} />
                 <Message display={this.state.displayErrors} handleClose={this.closeErrorMessage} type="danger" messages={this.state.errors} />
                 <form onSubmit={this.handleSubmit}>
                     <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.siteTitle')}`} name="title" value={this.state.title} />
