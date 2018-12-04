@@ -117,6 +117,7 @@
     "settings": {
         "loading": "Loading settings ...",
         "startingApplication": "Starting application ...",
+        "stoppingApplication": "Stopping application ...",
         "startFailed": "Failed to start the application",
         "stopFailed": "Failed to stop the application",
         "smtpPortMustInteger": "Smtp port must be an integer",

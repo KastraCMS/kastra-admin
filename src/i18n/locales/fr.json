@@ -117,6 +117,7 @@
     "settings": {
         "loading": "Chargement des options ...",
         "startingApplication": "Démarrage de l'application ...",
+        "stoppingApplication": "Arrêt de l'application ...",
         "startFailed": "Impossible de démarrer l'application",
         "stopFailed": "Impossible d'arrêter l'application",
         "smtpPortMustInteger": "Le port Smtp doit être un entier",
