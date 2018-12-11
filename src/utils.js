@@ -1,3 +1,10 @@
+import { isNil } from 'lodash'
+
 export const getXSRFToken = () => {
-    return document.getElementById('RequestVerificationToken').value;
+    const tokenInput = document.getElementById('RequestVerificationToken');
+    if(!isNil(tokenInput)) {
+        return tokenInput.value;
+    }
+
+    return 'empty';
 }

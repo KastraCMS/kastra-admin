@@ -14,6 +14,17 @@
         "visitNotFound": "Aucune visite trouvée",
         "userNotFound": "Aucun utilisateur trouvé"
     },
+    "login": {
+        "title": "Se connecter",
+        "subtitle": "Utiliser un compte local pour vous connecter",
+        "email": "Email",
+        "password": "Mot de passe",
+        "login": "Se connecter",
+        "rememberMe": "Se souvenir de moi",
+        "emptyEmail": "Le champ Email ne doit pas être vide",
+        "emptyPassword": "Le champ Mot de passe ne doit pas être vide",
+        "loginInProcess": "Connexion ..."
+    },
     "navigation": {
         "backToHome": "Retour à l'accueil",
         "home": "Accueil",

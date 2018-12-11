@@ -14,6 +14,17 @@
         "visitNotFound": "No visit found ...",
         "userNotFound": "No user found"
     },
+    "login": {
+        "title": "Log in",
+        "subtitle": "Use a local account to log in.",
+        "email": "Email",
+        "password": "Password",
+        "login": "Log in",
+        "rememberMe": "Remember me",
+        "emptyEmail": "The field Email is missing",
+        "emptyPassword": "The field Password is missing",
+        "loginInProcess": "Login in process ..."
+    },
     "navigation": {
         "backToHome": "Back to home",
         "home": "Home",

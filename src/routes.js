@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom'
 import Home from './components/home/home'
+import Login from './components/home/login'
 import Settings from './components/siteconfiguration/settings'
 import Module from './components/module/module'
 import ModuleList from './components/module/modulelist'
@@ -30,6 +31,7 @@ export const Routes = () => (
       <Route exact path='/admin/users/role/:roleId?' component={Role}/>
       <Route exact path='/admin/users/permissions' component={PermissionList}/>
       <Route path='/admin/settings' component={Settings}/>
+      <Route path='/admin/login' component={Login}/>
     </Switch>
   </main>
 )

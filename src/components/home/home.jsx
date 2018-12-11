@@ -48,7 +48,15 @@ class Home extends Component {
                     method: 'GET',
                     credentials: 'include'
                 })
-            .then(res => res.json())
+            .then(res => {
+                if(res.ok) {
+                    return res.json();
+                } else {
+                    if(res.status === 401) {
+                        this.props.history.push('/login');
+                    }
+                }
+            })
             .then(
                 (result) => {
                     this.setState({ stats: result });
