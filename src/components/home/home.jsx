@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Line } from 'react-chartjs'
 import * as Kastra from '../../constants'
 import { translate } from 'react-i18next';
+import Pagination from '../common/pagination';
 
 class Home extends Component {
 
@@ -26,8 +27,8 @@ class Home extends Component {
         this.fetchVersions();
     }
 
-    fetchGraphData() {
-        fetch(`${Kastra.API_URL}/api/Statistics/GetVisitorsByDay`, 
+    fetchGraphData(index) {
+        fetch(`${Kastra.API_URL}/api/Statistics/GetVisitorsByDay?index=${index}`, 
                 {
                     method: 'GET',
                     credentials: 'include'
@@ -82,8 +83,8 @@ class Home extends Component {
             });
     }
 
-    fetchRecentUsers() {
-        fetch(`${Kastra.API_URL}/api/Statistics/GetRecentUsers`, 
+    fetchRecentUsers(index) {
+        fetch(`${Kastra.API_URL}/api/Statistics/GetRecentUsers?index=${index}`, 
                 {
                     method: 'GET',
                     credentials: 'include'
@@ -248,6 +249,7 @@ class Home extends Component {
                                 <div className="bg-dark p-4">
                                     <h3>{t('home.visitByDay')}</h3>
                                     <Line id="visits-chart" data={this.state.data} options={{ maintainAspectRatio: false, pointDot: false, responsive: true }} />
+                                    <Pagination displayNext={false} load={(index) => this.fetchGraphData(index)} />
                                 </div>
                             </div>
                         </div>
@@ -256,12 +258,14 @@ class Home extends Component {
                                 <div className="bg-dark mr-sm-1 p-4">
                                     <h3>{t('home.recentUsers')}</h3>
                                     {this.renderRecentUsers()}
+                                    <Pagination displayPrevious={false} load={(index) => this.fetchRecentUsers(index)} />
                                 </div>
                             </div>
                             <div className="col-6">
                                 <div className="bg-dark p-4">
                                     <h3>{t('home.visits')}</h3>
                                     {this.renderVisitsTable()}
+                                    <Pagination displayPrevious={false} load={(index) => this.fetchVisits(index)} />
                                 </div>
                             </div>
                         </div>

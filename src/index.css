@@ -429,6 +429,23 @@ ul.CTAs a {
 }
 
 /* ---------------------------------------------------
+    PAGINATION
+----------------------------------------------------- */
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pagination a {
+    font-size: 1.5rem;
+}
+
+.pagination .hidden {
+    visibility: hidden;
+}
+
+/* ---------------------------------------------------
     COMPONENT CUSTOM
 ----------------------------------------------------- */
 
