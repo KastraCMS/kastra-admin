@@ -8,6 +8,7 @@ import Loading from '../common/loading';
 import isInteger from 'lodash/isInteger'
 import { translate } from 'react-i18next';
 import { getXSRFToken } from '../../utils';
+import TextInput from '../common/textinput';
 
 class Settings extends Component {
 
@@ -32,7 +33,10 @@ class Settings extends Component {
             errors: [],
             theme: '',
             themeList: [],
-            retry: 0
+            retry: 0,
+            checkConsentNeeded: true,
+            consentNotice: '',
+            cookieUsePolicyUrl: ''
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -81,6 +85,9 @@ class Settings extends Component {
                     data.emailSender = result.emailSender || '';
                     data.requireConfirmedEmail = result.requireConfirmedEmail || false;
                     data.theme = result.theme || '';
+                    data.checkConsentNeeded = result.checkConsentNeeded || true;
+                    data.consentNotice = result.consentNotice || '';
+                    data.cookieUsePolicyUrl = result.cookieUsePolicyUrl || '';
                     
                     data.themeList = [];
                     if(result.themeList !== undefined && result.themeList !== null) {
@@ -178,6 +185,9 @@ class Settings extends Component {
             data.emailSender = this.state.emailSender;
             data.requireConfirmedEmail = this.state.requireConfirmedEmail;
             data.theme = this.state.theme;
+            data.checkConsentNeeded = this.state.checkConsentNeeded;
+            data.consentNotice = this.state.consentNotice;
+            data.cookieUsePolicyUrl = this.state.cookieUsePolicyUrl;
             
             this.setState({isLoading: true, loadingMessage: t('settings.saving')});
 
@@ -240,6 +250,11 @@ class Settings extends Component {
                     <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.emailSender')}`} name="emailSender" value={this.state.emailSender} />
                     <h3 className="mt-5 mb-4">{t('settings.signIn')}</h3>
                     <CheckboxInput className="mt-5 mb-3" name="requireConfirmedEmail" handleChange={this.handleChange} checked={this.state.requireConfirmedEmail} title={t('settings.confirmedEmail')} />
+                    <h3 className="mt-5 mb-4">{t('settings.cookieSettings')}</h3>
+                    <CheckboxInput className="mt-5 mb-3" name="checkConsentNeeded" handleChange={this.handleChange} checked={this.state.checkConsentNeeded} title={t('settings.checkConsentNeeded')} />
+                    <TextInput type="text" handleChange={this.handleChange} title={`${t('settings.consentNotice')}`} name="consentNotice" value={this.state.consentNotice} />
+                    <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.cookieUsePolicyUrl')}`} name="cookieUsePolicyUrl" value={this.state.cookieUsePolicyUrl} />
+
                     <button type="submit" className="btn btn-outline-info mt-5 float-right">{t('settings.submit')}</button>
                 </form>
             </div>

@@ -150,7 +150,11 @@
         "signIn": "Sign In",
         "confirmedEmail": "Require confirmed email",
         "submit": "Submit",
-        "theme": "Tema"
+        "theme": "Tema",
+        "cookieSettings": "Cookie settings",
+        "consentNotice": "Consent notice",
+        "cookieUsePolicyUrl": "Cookie policy url",
+        "checkConsentNeeded": "Consent needed"
     },
     "permissionlist": {
         "loading": "Loading permissions ...",

@@ -150,7 +150,11 @@
         "signIn": "Connexion",
         "confirmedEmail": "Requiert un email vérifié",
         "submit": "Sauvegarder",
-        "theme": "Thème"
+        "theme": "Thème",
+        "cookieSettings": "Options des cookies",
+        "consentNotice": "Message d'informations sur les cookies",
+        "cookieUsePolicyUrl": "Url des informations sur les cookies",
+        "checkConsentNeeded": "Acceptation des cookies requis"
     },
     "permissionlist": {
         "loading": "Chargement des permissions ...",
