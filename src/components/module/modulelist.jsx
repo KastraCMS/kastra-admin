@@ -98,7 +98,7 @@ class ModuleList extends Component {
                         <td>{module.id}</td>
                         <td>{module.name}</td>
                         <td>
-                            <a href={`module/settings/${module.id}/settings`} onClick={(e) => this.openPopup(e)}>
+                            <a href={`${window.location.origin}/module/settings/${module.id}/settings`} onClick={(e) => this.openPopup(e)}>
                                 <span className="ion-gear-a"></span>
                             </a>
                         </td>
