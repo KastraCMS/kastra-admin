@@ -67,8 +67,8 @@ class Home extends Component {
             });
     }
 
-    fetchVisits() {
-        fetch(`${Kastra.API_URL}/api/Statistics/GetVisits`, 
+    fetchVisits(index) {
+        fetch(`${Kastra.API_URL}/api/Statistics/GetVisits?index=${index}`, 
                 {
                     method: 'GET',
                     credentials: 'include'
