@@ -1,6 +1,6 @@
 {
   "name": "kastraadmin",
-  "version": "0.9.12",
+  "version": "0.9.14",
   "private": true,
   "dependencies": {
     "ajv": "^6.5.4",
