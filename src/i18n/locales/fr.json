@@ -123,7 +123,8 @@
         "name": "Nom",
         "keyname": "Nom clé",
         "modules": "Modules",
-        "edit": "Editer"
+        "edit": "Editer",
+        "manageTemplates": "Gérer les templates de page"
     },
     "settings": {
         "loading": "Chargement des options ...",
@@ -155,6 +156,40 @@
         "consentNotice": "Message d'informations sur les cookies",
         "cookieUsePolicyUrl": "Url des informations sur les cookies",
         "checkConsentNeeded": "Acceptation des cookies requis"
+    },
+    "template": {
+        "loading": "Chargement du template ...",
+        "saving": "Sauvegarde du template ...",
+        "emptyName": "Le champ nom ne peut être vide",
+        "emptyKeyname": "Le champ nom clé du template ne peut être vide",
+        "requiredViewPath": "Un chemin doit être sélectionné",
+        "template": "Template",
+        "subtitle": "Modifier le template de page",
+        "updateSuccess": "Page mise à jour avec succès",
+        "name": "Nom du template",
+        "keyname": "Nom clé du template",
+        "submit": "Sauvegarder",
+        "defaultViewPath": "Aucun",
+        "defaultKeyname": "Aucun",
+        "newTemplate": "Nouveau template",
+        "modelClass": "Model de classe",
+        "viewPath": "Chemin du répertoire de vue"
+    },
+    "templatelist": {
+        "loadingPages": "Chargement des templates ...",
+        "deleting": "Suppression du template ...",
+        "noPageFound": "Aucun template trouvé",
+        "deleteTitle": "Supprimer un template",
+        "deleteMessage": "Êtes-vous sûr de vouloir supprimer",
+        "delete": "Supprimer",
+        "cancel": "Annuler",
+        "subtitle": "Gérer les templates du site",
+        "title": "Liste des templates",
+        "newPage": "Nouveau template",
+        "name": "Nom",
+        "keyname": "Nom clé",
+        "edit": "Editer",
+        "newTemplate": "Nouveau template"
     },
     "permissionlist": {
         "loading": "Chargement des permissions ...",

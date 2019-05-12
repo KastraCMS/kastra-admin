@@ -6,13 +6,13 @@ import Loading from '../common/loading';
 import { translate } from 'react-i18next';
 import { getXSRFToken } from '../../utils';
 
-class PageList extends Component {
+class TemplateList extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            pages: [],
+            templates: [],
             isLoading: false,
             loadingMessage: ''
         };
@@ -20,9 +20,9 @@ class PageList extends Component {
 
     componentDidMount() {
         const { t } = this.props;
-        this.setState({ isLoading: true, loadingMessage: t('pagelist.loadingPages') });
+        this.setState({ isLoading: true, loadingMessage: t('templatelist.loadingPages') });
 
-        fetch(`${Kastra.API_URL}/api/page/list`, 
+        fetch(`${Kastra.API_URL}/api/template/list`, 
         {
             method: 'GET',
             credentials: 'include'
@@ -31,7 +31,7 @@ class PageList extends Component {
         .then(
             (result) => {
             this.setState({
-                pages: result,
+                templates: result,
                 isLoading: false
             });
             }
@@ -44,9 +44,9 @@ class PageList extends Component {
     handleDelete(id) {
         const { t } = this.props;
 
-        this.setState({ isLoading: true, loadingMessage: t('pagelist.deleting') });
+        this.setState({ isLoading: true, loadingMessage: t('templatelist.deleting') });
 
-        fetch(`${Kastra.API_URL}/api/page/delete`, 
+        fetch(`${Kastra.API_URL}/api/template/delete`, 
         {
             method: 'DELETE',
             credentials: 'include',
@@ -67,35 +67,34 @@ class PageList extends Component {
         });
     }
 
-    renderPages() {
+    renderTemplates() {
         const { t } = this.props;
 
-        if(this.state.pages.length === 0) {
+        if(this.state.templates.length === 0) {
             return (
                 <tr>
-                    <td align="center" colSpan="6">{t('pagelist.noPageFound')}</td>
+                    <td align="center" colSpan="6">{t('templatelist.noTemplateFound')}</td>
                 </tr>
             );
         }
 
         return (
-            this.state.pages.map((page, index) => {
+            this.state.templates.map((template, index) => {
                 const dialogId = `dialog-${index}`;
                 return (
                     <tr key={index}>
-                        <td>{page.id}</td>
-                        <td>{page.name}</td>
-                        <td>{page.keyName}</td>
-                        <td><Link to={`/admin/modules/${page.id}`}><span className="ion-cube"></span></Link></td>
-                        <td><Link to={`/admin/pages/edit/${page.id}`}><span className="ion-compose"></span></Link></td>
+                        <td>{template.id}</td>
+                        <td>{template.name}</td>
+                        <td>{template.keyName}</td>
+                        <td><Link to={`/admin/pages/template/${template.id}`}><span className="ion-compose"></span></Link></td>
                         <td>
                             <a href="" onClick={(e) => e.preventDefault()} data-toggle="modal" data-target={`#${dialogId}`}><span className="ion-trash-a"></span></a>
                             <ConfirmDialog id={dialogId} 
-                                title={t('pagelist.deleteTitle')}
-                                message={`${t('pagelist.deleteMessage')} "${page.name}" ?`}
-                                onConfirm={() => this.handleDelete(page.id)}
-                                confirmLabel={t('pagelist.delete')}
-                                cancelLabel={t('pagelist.cancel')} />
+                                title={t('templatelist.deleteTitle')}
+                                message={`${t('templatelist.deleteMessage')} "${template.name}" ?`}
+                                onConfirm={() => this.handleDelete(template.id)}
+                                confirmLabel={t('templatelist.delete')}
+                                cancelLabel={t('templatelist.cancel')} />
                         </td>
                     </tr>
                 );
@@ -109,26 +108,22 @@ class PageList extends Component {
         return (
             <div className="text-white m-sm-5 p-5 bg-dark clearfix">
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
-                <h4 className="text-center">{t('pagelist.subtitle')}</h4>
+                <h4 className="text-center">{t('templatelist.subtitle')}</h4>
                 <hr/>
-                <h2 className="mb-5 text-center">{t('pagelist.title')}</h2>
-                <Link to={'/admin/pages/edit'} className="btn btn-outline-info mb-4">{t('pagelist.newPage')}</Link>
-                <div className="float-right">
-                    <Link to={'/admin/pages/templates'} className="btn btn-outline-info mb-5">{t('pagelist.manageTemplates')}</Link>
-                </div>
+                <h2 className="mb-5 text-center">{t('templatelist.title')}</h2>
+                <Link to={'/admin/pages/template'} className="btn btn-outline-info mb-4">{t('templatelist.newTemplate')}</Link>
                 <table className="table table-dark bg-dark">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">{t('pagelist.name')}</th>
-                            <th scope="col">{t('pagelist.keyname')}</th>
-                            <th scope="col">{t('pagelist.modules')}</th>
-                            <th scope="col">{t('pagelist.edit')}</th>
-                            <th scope="col">{t('pagelist.delete')}</th>
+                            <th scope="col">{t('templatelist.name')}</th>
+                            <th scope="col">{t('templatelist.keyname')}</th>
+                            <th scope="col">{t('templatelist.edit')}</th>
+                            <th scope="col">{t('templatelist.delete')}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.renderPages()}
+                        {this.renderTemplates()}
                     </tbody>
                 </table>
             </div>
@@ -136,4 +131,4 @@ class PageList extends Component {
     }
 }
 
-export default translate()(PageList);
+export default translate()(TemplateList);
