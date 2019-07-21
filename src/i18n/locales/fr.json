@@ -155,7 +155,9 @@
         "cookieSettings": "Options des cookies",
         "consentNotice": "Message d'informations sur les cookies",
         "cookieUsePolicyUrl": "Url des informations sur les cookies",
-        "checkConsentNeeded": "Acceptation des cookies requis"
+        "checkConsentNeeded": "Acceptation des cookies requis",
+        "testmail": "Test",
+        "testSuccess": "Le mail de test SMTP a été envoyé avec succès."
     },
     "template": {
         "loading": "Chargement du template ...",

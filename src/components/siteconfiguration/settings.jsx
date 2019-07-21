@@ -31,6 +31,7 @@ class Settings extends Component {
             isLoading: false,
             loadingMessage: '',
             errors: [],
+            successMessage: '',
             theme: '',
             themeList: [],
             retry: 0,
@@ -41,6 +42,7 @@ class Settings extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onBtnTestClick = this.onBtnTestClick.bind(this);
         this.closeSuccessMessage = this.closeSuccessMessage.bind(this);
         this.fetchSiteConfiguration = this.fetchSiteConfiguration.bind(this);
     }
@@ -151,6 +153,41 @@ class Settings extends Component {
         )
     }
 
+    onBtnTestClick(event) {
+        event.preventDefault();
+
+        const { t } = this.props;
+        fetch(`${Kastra.API_URL}/api/siteconfiguration/testmailasync`, 
+        {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then((response) => {
+                this.setState({ isLoading: true, loadingMessage: t('settings.startingApplication') });
+                if(response.ok) {
+                    let newState = {};
+                    newState.displayErrors = false;
+                    newState.displaySuccess = true;
+                    newState.isLoading = false;
+                    newState.successMessage = t("settings.testSuccess");
+                    
+                    this.setState(newState);
+                } else {
+                    const errorMessages = [];
+                    errorMessages.push(response.body);
+
+                    let newState = {};
+                    newState.errors = errorMessages;
+                    newState.displayErrors = true;
+                    newState.displaySuccess = false;
+                    newState.isLoading = false;
+                    
+                    this.setState(newState);
+                }
+            }
+        );
+    }
+
     handleSubmit(event) {
 
         const { t } = this.props;
@@ -206,6 +243,7 @@ class Settings extends Component {
                 () => {
                     data = {};
                     data.displaySuccess = true;
+                    data.successMessage = t('settings.successMessage');
                     this.fetchSiteConfiguration(data);
                     this.fetchRestartApplication();
                 }
@@ -233,7 +271,7 @@ class Settings extends Component {
                 <h4 className="text-center">{t('settings.subtitle')}</h4>
                 <hr/>
                 <h2 className="mb-5 text-center">{t('settings.title')}</h2>                
-                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message={t('settings.successMessage')} />
+                <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message={this.state.successMessage} />
                 <Message display={this.state.displayErrors} handleClose={this.closeErrorMessage} type="danger" messages={this.state.errors} />
                 <form onSubmit={this.handleSubmit}>
                     <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.siteTitle')}`} name="title" value={this.state.title} />
@@ -248,6 +286,7 @@ class Settings extends Component {
                     <SingleInput type="password" handleChange={this.handleChange} title={`${t('settings.smtpPassword')}`} name="smtpCredentialsPassword" value={this.state.smtpCredentialsPassword} />
                     <CheckboxInput name="smtpEnableSsl" handleChange={this.handleChange} checked={this.state.smtpEnableSsl} title={t('settings.smtpSsl')} />
                     <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.emailSender')}`} name="emailSender" value={this.state.emailSender} />
+                    <button onClick={this.onBtnTestClick} className="btn btn-outline-info mt-3 mb-3">{t('settings.testmail')}</button>
                     <h3 className="mt-5 mb-4">{t('settings.signIn')}</h3>
                     <CheckboxInput className="mt-5 mb-3" name="requireConfirmedEmail" handleChange={this.handleChange} checked={this.state.requireConfirmedEmail} title={t('settings.confirmedEmail')} />
                     <h3 className="mt-5 mb-4">{t('settings.cookieSettings')}</h3>
