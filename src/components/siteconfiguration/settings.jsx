@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
 import Message from '../common/message'
 import SingleInput from '../common/singleinput'
 import CheckboxInput from '../common/checkboxinput';
@@ -270,9 +271,10 @@ class Settings extends Component {
                 <Loading isLoading={this.state.isLoading} message={this.state.loadingMessage} />
                 <h4 className="text-center">{t('settings.subtitle')}</h4>
                 <hr/>
-                <h2 className="mb-5 text-center">{t('settings.title')}</h2>                
+                <h2 className="mb-5 text-center">{t('settings.title')}</h2>               
                 <Message display={this.state.displaySuccess} handleClose={this.closeSuccessMessage} type="success" message={this.state.successMessage} />
                 <Message display={this.state.displayErrors} handleClose={this.closeErrorMessage} type="danger" messages={this.state.errors} />
+                <Link to={'/admin/settings/mailtemplates'} className="btn btn-outline-info mb-4">{t('settings.managemailtemplate')}</Link>
                 <form onSubmit={this.handleSubmit}>
                     <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.siteTitle')}`} name="title" value={this.state.title} />
                     <SingleInput type="text" handleChange={this.handleChange} title={`${t('settings.description')}`} name="description" value={this.state.description} />

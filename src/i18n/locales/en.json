@@ -33,6 +33,17 @@
         "users": "Users",
         "settings": "Settings"
     },
+    "mailTemplateList": {
+        "title": "Mail templates",
+        "subtitle": "Manage mail templates",
+        "keyname": "Template keyname",
+        "subject": "Subject",
+        "message": "HTML message",
+        "actions": "Actions",
+        "noMailTemplateFound": "No mail template found",
+        "saving": "Saving mail template ...",
+        "loading": "Loading mail templates ..."
+    },
     "module": {
         "module": "Module",
         "newModule": "New module",
@@ -157,7 +168,8 @@
         "cookieUsePolicyUrl": "Cookie policy url",
         "checkConsentNeeded": "Consent needed",
         "testmail": "Test",
-        "testSuccess": "The SMTP email was sent with success."
+        "testSuccess": "The SMTP email was sent with success.",
+        "managemailtemplate": "Manage mail template"
     },
     "template": {
         "loading": "Loading template ...",

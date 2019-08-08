@@ -33,6 +33,17 @@
         "users": "Utilisateurs",
         "settings": "Options"
     },
+    "mailTemplateList": {
+        "title": "Modèles de mail",
+        "subtitle": "Gérer les modèles de mail",
+        "keyname": "Nom clé du modèle",
+        "subject": "Sujet",
+        "message": "Message HTML",
+        "actions": "Actions",
+        "noMailTemplateFound": "Aucun modèle de mail trouvé",
+        "saving": "Sauvegarde du modèle de mail ...",
+        "loading": "Chargement des modèles de mail ..."
+    },
     "module": {
         "module": "Module",
         "newModule": "Nouveau module",
@@ -157,7 +168,8 @@
         "cookieUsePolicyUrl": "Url des informations sur les cookies",
         "checkConsentNeeded": "Acceptation des cookies requis",
         "testmail": "Test",
-        "testSuccess": "Le mail de test SMTP a été envoyé avec succès."
+        "testSuccess": "Le mail de test SMTP a été envoyé avec succès.",
+        "managemailtemplate": "Gérer les templates de mail"
     },
     "template": {
         "loading": "Chargement du template ...",

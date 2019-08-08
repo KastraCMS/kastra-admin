@@ -306,6 +306,28 @@ ul.CTAs a {
     font-size: 0.8rem;
 }
 
+.action-btn {
+    display: inline-block;
+    color: #fff;
+    text-align: center;
+    font-size: 0.85em;
+    width: 2.5rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background-color: #414850;
+    border-radius: 1.5rem;
+}
+
+.action-btn a i {
+    display: block;
+    font-size: 1.8em;
+    height: 100%;
+}
+
 /* ---------------------------------------------------
     NAVIGATION
 ----------------------------------------------------- */

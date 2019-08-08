@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import Home from './components/home/home'
 import Login from './components/home/login'
 import Settings from './components/siteconfiguration/settings'
+import MailTempateList from './components/siteconfiguration/mails'
 import Module from './components/module/module'
 import ModuleList from './components/module/modulelist'
 import ModuleInstall from './components/module/moduleinstall'
@@ -34,7 +35,8 @@ export const Routes = () => (
       <Route exact path='/admin/users/roles' component={RoleList}/>
       <Route exact path='/admin/users/role/:roleId?' component={Role}/>
       <Route exact path='/admin/users/permissions' component={PermissionList}/>
-      <Route path='/admin/settings' component={Settings}/>
+      <Route exact path='/admin/settings' component={Settings}/>
+      <Route exact path='/admin/settings/mailtemplates' component={MailTempateList}/>
       <Route path='/admin/login' component={Login}/>
     </Switch>
   </main>
