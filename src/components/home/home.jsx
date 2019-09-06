@@ -202,6 +202,7 @@ class Home extends Component {
         }
 
         const { t } = this.props;
+        const { stats } = this.state;
         
         return (
             <div className="text-white mt-5 clearfix">
@@ -249,7 +250,7 @@ class Home extends Component {
                                 <div className="bg-dark p-4">
                                     <h3>{t('home.visitByDay')}</h3>
                                     <Line id="visits-chart" data={this.state.data} options={{ maintainAspectRatio: false, pointDot: false, responsive: true }} />
-                                    <Pagination displayNext={false} load={(index) => this.fetchGraphData(index)} />
+                                    <Pagination limit="5" enableNegativeIndex load={(index) => this.fetchGraphData(index)} />
                                 </div>
                             </div>
                         </div>
@@ -258,14 +259,14 @@ class Home extends Component {
                                 <div className="bg-dark mr-sm-1 p-4">
                                     <h3>{t('home.recentUsers')}</h3>
                                     {this.renderRecentUsers()}
-                                    <Pagination displayPrevious={false} load={(index) => this.fetchRecentUsers(index)} />
+                                    <Pagination limit="5" load={(index) => this.fetchRecentUsers(index)} total={stats.numberOfUsers} />
                                 </div>
                             </div>
                             <div className="col-6">
                                 <div className="bg-dark p-4">
                                     <h3>{t('home.visits')}</h3>
                                     {this.renderVisitsTable()}
-                                    <Pagination displayPrevious={false} load={(index) => this.fetchVisits(index)} />
+                                    <Pagination limit="5" load={(index) => this.fetchVisits(index)} total={stats.totalVisits} />
                                 </div>
                             </div>
                         </div>

@@ -467,6 +467,23 @@ ul.CTAs a {
     visibility: hidden;
 }
 
+.pagination .numbers {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.pagination .numbers a {
+    padding: 0 0.2rem;
+    font-size: 1rem;
+}
+
+.pagination .numbers span {
+    padding: 0 0.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
 /* ---------------------------------------------------
     COMPONENT CUSTOM
 ----------------------------------------------------- */
