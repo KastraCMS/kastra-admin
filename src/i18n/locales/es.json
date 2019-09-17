@@ -78,6 +78,8 @@
         "title": "Module list",
         "newModule": "New module",
         "manageModuleDefinitions": "Manage module definitions",
+        "definitionName": "Module definition",
+        "placeName": "Place name",
         "name": "Name",
         "contentSettings": "Content - Settings",
         "edit": "Edit",
