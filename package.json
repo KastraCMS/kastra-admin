@@ -9,7 +9,7 @@
     "i18next": "^11.10.2",
     "i18next-browser-languagedetector": "^2.2.3",
     "jquery": "^3.4.0",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "popper.js": "^1.14.4",
     "react": "^16.6.0",
     "react-chartjs": "^1.2.0",
