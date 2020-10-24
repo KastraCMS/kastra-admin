@@ -256,15 +256,27 @@ class Module extends Component {
         } else {
             this.setState({ isLoading: true, loadingMessage: t('module.saving') });
 
-            let data = {};
-            data.id = this.state.moduleId;
-            data.name = this.state.name;
-            data.definitionId = this.state.definitionId;
-            data.pageId = this.state.pageId;
-            data.placeId = this.state.placeId;
-            data.permissions = this.state.permissions;
-            data.isStatic = this.state.isStatic;
-            data.isDisabled = this.state.isDisabled;
+            const { 
+                id, 
+                name, 
+                definitionId, 
+                pageId, 
+                placeId, 
+                permissions, 
+                isStatic, 
+                isDisabled
+            } = this.state;
+            
+            const data = {
+                id: parseInt(id, 10) || 0, 
+                name, 
+                definitionId: parseInt(definitionId, 10),
+                pageId: parseInt(pageId, 10),  
+                placeId: parseInt(placeId, 10), 
+                permissions, 
+                isStatic, 
+                isDisabled
+            };
 
             fetch(`${Kastra.API_URL}/api/module/update`, 
             {
